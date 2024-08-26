@@ -1,12 +1,12 @@
 <?php
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
-	$inData = getRequestInfo();
+    $inData = getRequestInfo();
 	
-	$id = 0;
-	$firstName = "";
-	$lastName = "";
+    $id = 0;
+    $firstName = "";
+    $lastName = "";
 
     // database credentials
     $database_username = "User";
@@ -23,7 +23,7 @@
         $stmt->bind_param("s", $inData["login"]);
         $stmt->execute();
         $result = $stmt->get_result();
-
+	
         if ($result->num_rows > 0) {
             returnWithError("User already exists");
         } else {
