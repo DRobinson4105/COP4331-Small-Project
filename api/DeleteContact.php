@@ -12,7 +12,7 @@
 	else
 	{
 		//Parameters maybe different as we need a name, phone number, email
-		$stmt = $conn->prepare("DELETE from Contacts WHERE ID ='?");
+		$stmt = $conn->prepare("DELETE from Contacts WHERE ID=?");
 		$stmt->bind_param("s", $ID);
 		$stmt->execute();
 		$stmt->close();
