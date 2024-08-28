@@ -1,64 +1,66 @@
 <?php
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
-    $inData = getRequestInfo();
 	
-    $id = 0;
-    $firstName = "";
-    $lastName = "";
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
 
-    // database credentials
-    $database_username = "User";
-    $database_password = "COP4331OMg";
-    $database_name = "COP4331";
+	$fName = $inData["FirstName"];
+	$lName = $inData["LastName"];
+	$username = $inData["Username"];
+	$password = $inData["Password"];
+	$cpassword= $inData["CPassword"];
+	
 
-    # connect to the database
-	$conn = new mysqli("localhost", $database_username, $database_password, $database_name); 	
-	if ($conn->connect_error) {
+	$conn = new mysqli("localhost", "User", "COP4331OMg", "COP4331");
+	if ($conn->connect_error) 
+	{
 		returnWithError( $conn->connect_error );
-    } else {
-        // check if user already exists
-        $stmt = $conn->prepare("SELECT ID FROM Users WHERE Login = ?");
-        $stmt->bind_param("s", $inData["login"]);
-        $stmt->execute();
-        $result = $stmt->get_result();
-	
-        if ($result->num_rows > 0) {
-            returnWithError("User already exists");
-        } else {
-            // create user
-            $stmt = $conn->prepare("INSERT INTO Users (Login, Password) Values (?, ?)");
-            $stmt->bind_param("ss", $inData["login"], $inData["password"]);
+	} 
+	else
+	{
+		//creates a variable named fname using the variable fname from the html.
+		/*The html variable is subject to changed based on the actual name
+		$fname = $_POST['firstName'];
+		$lname = $_POST['lastName'];
+		$username = $_POST['login'];
+		$password = $_POST['password'];
+		$cpassword = $_POST['cpassword'];confirm password*/
 
-            if ($stmt->execute()) {
-                $id = $stmt->insert_id;
-                returnWithInfo($id);
-            } else {
-                returnWithError("Could not make account right now");
-            }
-        }        
-
+		$stmt = $conn->prepare("INSERT into Users (FirstName,LastName,Username,Password) VALUES(?,?,?,?,?)");
+		$stmt->bind_param("ssss", $fName, $lName, $username, $password);
+		$stmt->execute();
 		$stmt->close();
-        $conn->close();
-	}
-	
-	function getRequestInfo() {
-		return json_decode(file_get_contents('php://input'), true);
+		$conn->close();
+		returnWithError("");
+
+
+		if ($password == $cpassword)//Check if passwords match
+		{
+			//Check to see if the username is already in use
+			$query = mysqli_query($mysqli, $username);
+
+			if($result == TRUE)//Username is already in database
+			{
+			echo "Username already exists";
+			}
+			else//Username not in database
+			{
+				//Add the user
+				$stmt = $conn->prepare("INSERT into Users (FirstName,LastName,Login,Password) VALUES(?,?,?,?)");
+				$stmt->bind_param("ssss", $fname, $lname, $username, $password);
+				$stmt->execute();
+				$stmt->close();
+				$conn->close();
+				returnWithError("");
+			}
+		}
+		else//If not, tell them it doesn't match
+		{
+			$_SESSION['message'] = "Passwords do not match.";
+			//Should output to some place in the HTML files
+			exit(0);
+
+		}
 	}
 
-	function sendResultInfoAsJson($obj) {
-		header('Content-type: application/json');
-		echo $obj;
-	}
-	
-	function returnWithError($err) {
-		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
-		sendResultInfoAsJson($retValue);
-	}
-	
-	function returnWithInfo($id) {
-		$retValue = '{"id":' . $id . '","error":""}';
-		sendResultInfoAsJson($retValue);
-	}
+
 ?>
