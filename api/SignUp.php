@@ -25,7 +25,7 @@
 		$password = $_POST['password'];
 		$cpassword = $_POST['cpassword'];confirm password*/
 
-		$stmt = $conn->prepare("INSERT into Users (FirstName,LastName,Username,Password) VALUES(?,?,?,?,?)");
+		$stmt = $conn->prepare("INSERT into Users (FirstName,LastName,Username,Password) VALUES(?,?,?,?)");
 		$stmt->bind_param("ssss", $fName, $lName, $username, $password);
 		$stmt->execute();
 		$stmt->close();
