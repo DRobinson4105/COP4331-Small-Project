@@ -1,10 +1,11 @@
 <?php
 	$inData = getRequestInfo();
-	//These are placeholder files. They do not have actual usable content
-	$ID = $inData["ID"];
+	$id = $inData["id"];
 
-	//Must change the name of the username, password & database. localhost stays the same. 
-	$conn = new mysqli("localhost", "fredrick", "798v", "COP4331"); 
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+
+	$conn = new mysqli("localhost", "User", "COP4331OMg", "COP4331"); 
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
@@ -12,8 +13,8 @@
 	else
 	{
 		//Parameters maybe different as we need a name, phone number, email
-		$stmt = $conn->prepare("DELETE from Contacts WHERE ID=?");
-		$stmt->bind_param("s", $ID);
+		$stmt = $conn->prepare("DELETE FROM Contacts WHERE ID =?");
+		$stmt->bind_param("s", $id);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();
