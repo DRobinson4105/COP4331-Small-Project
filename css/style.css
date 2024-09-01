@@ -1,0 +1,46 @@
+body {
+    background-color:#AEC7D5;
+    font-family: "Judson";
+}
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+}
+
+img {
+    width: 200px;
+    height: 200px;
+}
+
+input {
+    text-align: center;
+    font-family: "Judson";
+    font-size: 150%;
+    background-color:#F2E5E5;
+    height: 37px;
+    width: 375px;
+}
+
+button {
+    font-family: "Judson";
+    background-color:#486B79;
+    color: #F2E5E5;
+    width: 150px;
+    border: none;
+    border-radius: 30px;
+    height: 37px;
+    font-size: 125%;
+    padding-bottom: 3px;
+}
+
+span {
+    text-align: center;
+    font-family: "Judson";
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
