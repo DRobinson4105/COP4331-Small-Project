@@ -39,12 +39,12 @@
 	}
 	
 	function returnWithError($err) {
-		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+		$retValue = '{"id":0,"error":"' . $err . '"}';
 		sendResultInfoAsJson($retValue);
 	}
 	
 	function returnWithInfo($id) {
-		$retValue = '{"id":' . $id . '","error":""}';
+		$retValue = '{"id":' . $id . ',"error":""}';
 		sendResultInfoAsJson($retValue);
 	}
 	
