@@ -27,13 +27,16 @@ button {
     background-color:#486B79;
     color: #F2E5E5;
     width: 150px;
-    margin-left: 50px; 
-    margin-right: 50px;
     border: none;
     border-radius: 30px;
     height: 37px;
     font-size: 125%;
     padding-bottom: 3px;
+}
+
+span {
+    text-align: center;
+    font-family: "Judson";
 }
 
 .center {
