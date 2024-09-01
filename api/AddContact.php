@@ -8,15 +8,12 @@
 	$userId = $inData["userId"];
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
+	
+	$database_username = "User";
+	$database_password = "COP4331OMg";
+	$database_name = "COP4331";
 
-	//Must change the name of the username, password & database. localhost stays the same. 
-	//Bobby should give me all of these
-    // database credentials
-    $database_username = "User";
-    $database_password = "COP4331OMg";
-    $database_name = "COP4331";
-
-    $conn = new mysqli("localhost", $database_username, $database_password, $database_name);
+    	$conn = new mysqli("localhost", $database_username, $database_password, $database_name);
 	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
@@ -36,7 +33,7 @@
 		}
 		else
 		{
-			returnWithError("Statement could not execute");
+			returnWithError("Contact could not be added at this time");
 		}
 		//echo $fName," ", $userId," ", $lName,"", $email," ";
 	}
