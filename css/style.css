@@ -39,6 +39,23 @@ span {
     font-family: "Judson";
 }
 
+table {
+    font-family: "Judson";
+    font-size: 150%;
+    table-layout: fixed;
+    width: 1100px;
+}
+
+tr {
+    background-color: #486B79;
+}
+
+td {
+    padding-left: 10px;
+    width: 240px;
+    color: #F2E5E5;
+}
+
 .center {
     display: block;
     margin-left: auto;
