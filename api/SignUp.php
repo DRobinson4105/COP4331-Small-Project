@@ -1,6 +1,4 @@
 <?php
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
 	$inData = getRequestInfo();
 	
 	if (!isset($inData['username']) || !isset($inData['password'])) {
@@ -24,31 +22,31 @@
 	$conn = new mysqli("localhost", $database_username, $database_password, $database_name); 	
 	if ($conn->connect_error) {
 		returnWithError( $conn->connect_error );
-    	} else {
-        	// check if user already exists
-        	$stmt = $conn->prepare("SELECT ID FROM Users WHERE Login = ?");
-        	$stmt->bind_param("s", $username);
-        	$stmt->execute();
-        	$result = $stmt->get_result();
-	
-        	if ($result->num_rows > 0) {
-        		returnWithError("User already exists", 409);
-        	} else {
-			// create user
-			$stmt = $conn->prepare("INSERT INTO Users (Login, Password) Values (?, ?)");
-			$stmt->bind_param("ss", $username, $password);
+    } else {
+        // check if user already exists
+        $stmt = $conn->prepare("SELECT ID FROM Users WHERE Login = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-			if ($stmt->execute()) {
-				$id = $stmt->insert_id;
-				returnWithInfo($id);
-			} else {
-				returnWithError("Could not make an account right now", 500);
-			}
-		}
+        if ($result->num_rows > 0) {
+            returnWithError("User already exists", 409);
+        } else {
+            // create user
+            $stmt = $conn->prepare("INSERT INTO Users (Login, Password) Values (?, ?)");
+            $stmt->bind_param("ss", $username, $password);
+
+            if ($stmt->execute()) {
+                $id = $stmt->insert_id;
+                returnWithInfo($id);
+            } else {
+                returnWithError("Could not make an account right now", 500);
+            }
+        }
 
 		$stmt->close();
 		$conn->close();
-	}
+    }
 
 	function getRequestInfo() {
 		return json_decode(file_get_contents('php://input'), true);
