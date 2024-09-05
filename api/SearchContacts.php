@@ -1,47 +1,75 @@
 <?php
 
 	$inData = getRequestInfo();
+
+	if (!isset($inData['startIndex']) || !isset($inData['endIndex']) || !isset($inData['UserId']) || !isset($inData['search'])) {
+		returnWithError("Invalid input", 400);
+		return;
+	}
 	
 	$searchResults = "";
 	$searchCount = 0;
 
+	$database_username = "User";
+	$database_password = "COP4331OMg";
+	$database_name = "COP4331";
+
+	$startIndex = $inData["startIndex"];
+	$endIndex = $inData["endIndex"];
+
+	$Limit = $inData["endIndex"] - $inData["startIndex"];
+
     //Connect to database.
-	$conn = new mysqli("localhost", "fredrick", "798v", "COP4331"); 
+	$conn = new mysqli("localhost", $database_username, $database_password, $database_name); 
 	if ($conn->connect_error)
 	{
-		returnWithError( $conn->connect_error );
+		returnWithError( $conn->connect_error , 500);
 	} 
 	else
 	{
         //Search through names 
-        $stmt = $conn->prepare("select Name from Contacts where FirstName like ? and UserID=?");
+        $stmt = $conn->prepare("select * from Contacts where UserID=? and FirstName like ? or LastName like ? LIMIT ? OFFSET ?");
 		$contactName = "%" . $inData["search"] . "%";
-		$stmt->bind_param("ss", $contactName, $inData["UserId"]);
+		$stmt->bind_param("sssss", $inData["UserId"], $contactName, $contactName, $Limit, $startIndex); 
 		$stmt->execute();
 		
 		$result = $stmt->get_result();
 		
-		while($row = $result->fetch_assoc())
-		{
-			if( $searchCount > 0 )
+		$contacts = array();
+			while ($row = $result->fetch_assoc()) 
 			{
-				$searchResults .= ",";
+				$contact = array(
+					"id" => $row["ID"],
+					"firstName" => $row["FirstName"],
+					"lastName" => $row["LastName"],
+					"phone" => $row["Phone"],
+					"email" => $row["Email"],
+				);
+				$contacts[] = $contact;
 			}
-			$searchCount++;
-			$searchResults .= '"' . $row["Name"] . '"';
-		}
+
+
 		
-		if( $searchCount == 0 )
-		{
-			returnWithError( "No Contact with said Parameters Found" );
-		}
-		else
-		{
-			returnWithInfo( $searchResults );
-		}
-		
+		// while($row = $result->fetch_assoc())
+		// {	
+		// 	$myContact = new Contact();
+		// 	$myContact->fname = $row["FirstName"];
+		// 	$myContact->lname = $row["LastName"];
+		// 	$myContact->id = $row["ID"];
+		// 	$myContact->userid = $row["UserID"];
+		// 	$myContact->phone = $row["Phone"];
+		// 	$myContact->email = $row["Email"];
+		// 	if( $searchCount > 0 )
+		// 	{
+		// 		$searchResults .= ",";
+		// 	}
+		// 	$searchCount++;
+		// 	$searchResults .= '"' . $myContact . '"';
+		// }
 		$stmt->close();
 		$conn->close();
+		
+		returnWithInfo(json_encode($contacts));
 	}
 
 	function getRequestInfo()
@@ -55,10 +83,10 @@
 		echo $obj;
 	}
 	
-	function returnWithError( $err )
-	{
-		$retValue = '{"ID":0,"FirstName":"","LastName":"","error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue );
+	function returnWithError($err, $code) {
+		$retValue = '{"id":-1,"error":"' . $err . '"}';
+		http_response_code($code);
+		sendResultInfoAsJson($retValue);
 	}
 	
 	function returnWithInfo( $searchResults )
