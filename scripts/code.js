@@ -11,7 +11,7 @@ function doLogin()
     firstName = "";
     lastName = "";
     
-    let login = document.getElementById("username").value;
+    let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
 
     let tmp = {login:login,password:password};
@@ -60,7 +60,7 @@ function doSignUp()
     firstName = "";
     lastName = "";
     
-    let login = document.getElementById("username").value;
+    let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
 
     let tmp = {login:login,password:password};
