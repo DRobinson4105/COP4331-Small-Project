@@ -4,6 +4,8 @@ const extension = 'php';
 let userId = 0;
 let firstName = "";
 let lastName = "";
+let startIdx = 0;
+let endIdx = 10;
 
 function doLogin()
 {
@@ -144,6 +146,15 @@ function readCookie()
 	}
 }
 
+function doLogout()
+{
+	userId = 0;
+	firstName = "";
+	lastName = "";
+	document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	window.location.href = "index.html";
+}
+
 function searchContact()
 {
     let srch = document.getElementById("searchText").value;
@@ -151,8 +162,8 @@ function searchContact()
 
     let contactList = "";
 
-    let tmp = {search:srch,userId:userId};
-    let jsonPayload = JSON.stringify( tmp );
+	let tmp = {search:srch,UserId:userId,startIndex:startIdx,endIndex:endIdx};
+	let jsonPayload = JSON.stringify( tmp );
 
     let url = urlBase + '/SearchContacts.' + extension;
 
@@ -167,7 +178,7 @@ function searchContact()
             {
                 let jsonObject = JSON.parse( xhr.responseText );
                 let table = document.createElement('table');
-                for( let i=0; i<jsonObject.results.length; i++ )
+                for( let i=0; i<jsonObject.results[0].length; i++ )
                 {
                     var tr = document.createElement('tr');
 
@@ -175,21 +186,28 @@ function searchContact()
                     var lastName = document.createElement('td');
                     var email = document.createElement('td');
                     var phoneNum = document.createElement('td');
-                  
-                    var firstNameText = document.createTextNode(jsonObject[i][0]);
-                    var lastNameText = document.createTextNode(jsonObject[i][1]);
-                    var emailText = document.createTextNode(jsonObject[i][2]);
-                    var phoneNumText = document.createTextNode(jsonObject[i][3]);
-                  
+                    var edit = document.createElement('td');
+
+		    edit.style.width = "140px";
+                
+                    var firstNameText = document.createTextNode(jsonObject["results"][0][i]["firstName"]);
+                    var lastNameText = document.createTextNode(jsonObject["results"][0][i]["lastName"]);
+                    var emailText = document.createTextNode(jsonObject["results"][0][i]["email"]);
+                    var phoneNumText = document.createTextNode(jsonObject["results"][0][i]["phone"]);
+                    var editText = document.createTextNode("");
+                    
                     firstName.appendChild(firstNameText);
                     lastName.appendChild(lastNameText);
                     email.appendChild(emailText);
                     phoneNum.appendChild(phoneNumText);
+                    edit.appendChild(editText);
+
                     tr.appendChild(firstName);
                     tr.appendChild(lastName);
                     tr.appendChild(email);
                     tr.appendChild(phoneNum);
-                  
+                    tr.appendChild(edit);
+                    
                     table.appendChild(tr);
                 }
 
@@ -203,71 +221,3 @@ function searchContact()
         document.getElementById("contactSearchResult").innerHTML = err.message;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function tempSearchContact()
-{
-    let srch = document.getElementById("searchText").value;
-    document.getElementById("contactSearchResult").innerHTML = "";
-
-    let contactList = "";
-
-    let tmp = {search:srch,userId:userId};
-    let jsonPayload = JSON.stringify( tmp );
-
-    let url = urlBase + '/SearchContacts.' + extension;
-
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-    let tempJsonObject = '[{"firstName": "Joe", "lastName": "Smith", "email": "joesmith@gmail.com", "phoneNumber": "43094302940"}, {"firstName": "Lebron", "lastName": "James", "email": "lebron@gmail.com", "phoneNumber": "407"}, {"firstName": "Rick", "lastName": "Leinicker", "email": "rickl@gmail.com", "phoneNumber": "911"}, {"firstName": "John", "lastName": "Jiohnnnnn", "email": "john@gmail.com", "phoneNumber": "912"}]';
-    let jsonObject = JSON.parse(tempJsonObject);
-    let table = document.createElement('table');
-
-    for( let i=0; i<jsonObject.length; i++ )
-    {
-        var tr = document.createElement('tr');
-
-        var firstName = document.createElement('td');
-        var lastName = document.createElement('td');
-        var email = document.createElement('td');
-        var phoneNum = document.createElement('td');
-        var edit = document.createElement('td');
-    
-        var firstNameText = document.createTextNode(jsonObject[i]["firstName"]);
-        var lastNameText = document.createTextNode(jsonObject[i]["lastName"]);
-        var emailText = document.createTextNode(jsonObject[i]["email"]);
-        var phoneNumText = document.createTextNode(jsonObject[i]["phoneNumber"]);
-        var editText = document.createTextNode("");
-        
-        firstName.appendChild(firstNameText);
-        lastName.appendChild(lastNameText);
-        email.appendChild(emailText);
-        phoneNum.appendChild(phoneNumText);
-        edit.appendChild(editText);
-
-        tr.appendChild(firstName);
-        tr.appendChild(lastName);
-        tr.appendChild(email);
-        tr.appendChild(phoneNum);
-        tr.appendChild(edit);
-        
-        table.appendChild(tr);
-    }
-
-    document.getElementById("contactSearchResult").appendChild(table);
-}
-    

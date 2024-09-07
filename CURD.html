@@ -4,12 +4,12 @@
         <link rel="stylesheet" href="css/style.css">
         <link href='https://fonts.googleapis.com/css?family=Judson' rel='stylesheet'>
         <script src="scripts/code.js"></script>
-        <!--<script type="text/javascript">
+        <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() 
             {
                 readCookie();
             }, false);
-        </script>--->
+        </script>
     </head>
     <body>
 	    <div class="center" style="width: 1100px; margin-top: 50px; display: flex; justify-content: space-between;">
@@ -17,8 +17,9 @@
                 <button type="submit" style="width: 43px; height: 43px"><img src="images/logo-white.png" style="width: 100%; height: 100%; padding-top: 5%; padding-bottom: 5%;"></button>
             </form>
             <input id="searchText" type="text" placeholder="Search..." style="width: 750px">
-            <button type="button" onclick="tempSearchContact();"><img src="images/SearchIcon.png" style="width: 25%; height: 85%; padding-top: 2%; " alt=""></button> 
+            <button type="button" style="width: 43px; height: 43px" onclick="searchContact();"><img src="images/SearchIcon.png" style="width: 75%; height: 75%; padding-top: 10%; " alt=""></button> 
             <button type="submit" style="width: 43px; height: 43px"><img src="images/AddContact.png" style="width: 90%; height: 90%; padding-top: 5%; padding-left: 5%;"></button> 
+            <button type="submit" onclick="doLogout();">Logout</button>
         </div><br>
         <table>
             <tr style="background-color: #486B79;">
