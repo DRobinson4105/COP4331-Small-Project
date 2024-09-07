@@ -3,7 +3,7 @@
 	//error_reporting(E_ALL);
 	//ini_set('display_errors', 1);
 	
-	if (!isset($inData['firstName']) || !isset($inData['lastName']) || !isset($inData['userID']) || !isset($inData['phoneNumber']) || !isset($inData['email'])) {
+	if (!isset($inData['firstName']) || !isset($inData['lastName']) || !isset($inData['userId']) || !isset($inData['phoneNumber']) || !isset($inData['email'])) {
 		returnWithError("Invalid input", 400);
 		return;
 	}
