@@ -21,7 +21,7 @@
 	# connect to the database
 	$conn = new mysqli("localhost", $database_username, $database_password, $database_name); 	
 	if ($conn->connect_error) {
-		returnWithError( $conn->connect_error );
+		returnWithError( $conn->connect_error, 500);
     } else {
         // check if user already exists
         $stmt = $conn->prepare("SELECT ID FROM Users WHERE Login = ?");
