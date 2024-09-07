@@ -1,8 +1,13 @@
 <?php
 	$inData = getRequestInfo();
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
+	//error_reporting(E_ALL);
+	//ini_set('display_errors', 1);
 	
+	if (!isset($inData['firstName']) || !isset($inData['lastName']) || !isset($inData['userID']) || !isset($inData['phoneNumber']) || !isset($inData['email'])) {
+		returnWithError("Invalid input", 400);
+		return;
+	}
+
 	$fName = $inData["firstName"];
 	$lName = $inData["lastName"];
 	$userId = $inData["userId"];
@@ -16,7 +21,7 @@
     	$conn = new mysqli("localhost", $database_username, $database_password, $database_name);
 	if ($conn->connect_error) 
 	{
-		returnWithError( $conn->connect_error );
+		returnWithError( $conn->connect_error, 500);
 	} 
 	else
 	{
@@ -29,11 +34,12 @@
 			$Id = $conn->insert_id;
 			$conn->close();
 			sendResultInfoAsJson($Id);
-			returnWithError("");
+			returnWithError("", 200);
 		}
 		else
 		{
-			returnWithError("Contact could not be added at this time");
+			returnWithError("Contact could not be added at this time", 500);
+			$conn->close();
 		}
 		//echo $fName," ", $userId," ", $lName,"", $email," ";
 	}
@@ -49,10 +55,10 @@
 		echo $obj;
 	}
 	
-	function returnWithError( $err )
-	{
-		$retValue = '{"error":"' . $err . '"}';
-		sendResultInfoAsJson( $retValue );
+	function returnWithError($err, $code) {
+		$retValue = '{"id":-1,"error":"' . $err . '"}';
+		http_response_code($code);
+		sendResultInfoAsJson($retValue);
 	}
 	
 ?>
