@@ -1,12 +1,12 @@
 <?php
 	$inData = getRequestInfo();
 	
-	if (!isset($inData['username']) || !isset($inData['password'])) {
+	if (!isset($inData['login']) || !isset($inData['password'])) {
 		returnWithError("Invalid input", 400);
 		return;
 	}
 
-	$username = $inData["username"];
+	$username = $inData["login"];
 	$password = $inData["password"];
 
    	$id = 0;
