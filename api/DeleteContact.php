@@ -11,11 +11,6 @@
 	// error_reporting(E_ALL);
 	// ini_set('display_errors', 1);
 
-		if (!isset($inData['login']) || !isset($inData['password'])) {
-		returnWithError("Invalid input", 400);
-		return;
-	}
-
 	$conn = new mysqli("localhost", "User", "COP4331OMg", "COP4331"); 
 	if ($conn->connect_error) 
 	{
