@@ -26,7 +26,6 @@
 
                         if ($row = $result->fetch_assoc()) {
                                 returnWithInfo($row['ID']);
-                                returnWithError("", 200);
                         } else {
                                 returnWithError("Username or password is wrong", 400);
                         }
