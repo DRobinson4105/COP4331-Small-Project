@@ -178,6 +178,8 @@ function searchContact()
             {
                 let jsonObject = JSON.parse( xhr.responseText );
                 let table = document.createElement('table');
+                table.style.backgroundColor = "#F2E5E5";
+                table.id = "contactTable";
                 for( let i=0; i<jsonObject.results[0].length; i++ )
                 {
                     var tr = document.createElement('tr');
@@ -188,7 +190,7 @@ function searchContact()
                     var phoneNum = document.createElement('td');
                     var edit = document.createElement('td');
 
-		    edit.style.width = "140px";
+		            edit.style.width = "140px";
                 
                     var firstNameText = document.createTextNode(jsonObject["results"][0][i]["firstName"]);
                     var lastNameText = document.createTextNode(jsonObject["results"][0][i]["lastName"]);
@@ -220,4 +222,41 @@ function searchContact()
     {
         document.getElementById("contactSearchResult").innerHTML = err.message;
     }
+}
+
+function newRow() {
+    let table = document.getElementById("contactTable");
+    let newRow = table.insertRow(0);
+    for(var i = 0; i < 5; i++) {
+        let newCell = newRow.insertCell();
+
+        if(i == 4) {
+            newCell.style.width = "140px";
+            const apply = document.createElement("button");
+            apply.textContent = "Y";
+            apply.style = "width: 30px; height: 30px";
+            // Add onclick
+            newCell.appendChild(apply);
+            const discard = document.createElement("button");
+            discard.textContent = "N";
+            discard.style = "width: 30px; height: 30px";
+            // Add onclick
+            newCell.appendChild(discard);
+        }
+        else {
+            let newText = document.createTextNode("");
+            newCell.appendChild(newText);
+            newCell.contentEditable = true;
+            newCell.style.backgroundColor = "#D0BFB4";
+        }
+    }
+    if(table.rows.length > 10) {
+        table.deleteRow(10);
+    }
+}
+
+function addContact() {
+    // Get row with new contact information
+    // Make text fields uneditable and reset style
+    // Make API call
 }
