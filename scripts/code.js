@@ -190,7 +190,10 @@ function searchContact()
                     var phoneNum = document.createElement('td');
                     var edit = document.createElement('td');
 
-		            edit.style.width = "140px";
+		    edit.style.width = "140px";
+		    edit.style.display = "flex";
+                    edit.style.justifyContent = "space-evenly";
+		    edit.style.paddingLeft = "0px";
                 
                     var firstNameText = document.createTextNode(jsonObject["results"][0][i]["firstName"]);
                     var lastNameText = document.createTextNode(jsonObject["results"][0][i]["lastName"]);
@@ -226,21 +229,31 @@ function searchContact()
 
 function newRow() {
     let table = document.getElementById("contactTable");
+    if(table == undefined) {
+        table = document.createElement('table');
+        table.style.backgroundColor = "#F2E5E5";
+        table.id = "contactTable";
+	document.getElementById("contactSearchResult").appendChild(table);
+    }
     let newRow = table.insertRow(0);
     for(var i = 0; i < 5; i++) {
         let newCell = newRow.insertCell();
 
         if(i == 4) {
             newCell.style.width = "140px";
-            const apply = document.createElement("button");
-            apply.textContent = "Y";
-            apply.style = "width: 30px; height: 30px";
+            newCell.style.display = "flex";
+            newCell.style.justifyContent = "space-evenly";
+            newCell.style.paddingLeft = "0px";
+            newCell.style.padding = "2px";
+            const apply = document.createElement("img");
+            apply.src = "images/confirm.png";
+            apply.style = "width: 23%; height: 23%";
             // Add onclick
             newCell.appendChild(apply);
-            const discard = document.createElement("button");
-            discard.textContent = "N";
-            discard.style = "width: 30px; height: 30px";
-            // Add onclick
+            const discard = document.createElement("img");
+            discard.src = "images/discard.png";
+            discard.style = "width: 18%; height: 18%";
+            discard.onclick = function(){newRow.remove()};
             newCell.appendChild(discard);
         }
         else {
@@ -250,12 +263,9 @@ function newRow() {
             newCell.style.backgroundColor = "#D0BFB4";
         }
     }
-    if(table.rows.length > 10) {
-        table.deleteRow(10);
-    }
 }
 
-function addContact() {
+function addContact(e) {
     // Get row with new contact information
     // Make text fields uneditable and reset style
     // Make API call
