@@ -2,7 +2,7 @@
 
 	$inData = getRequestInfo();
 
-	if (/*!isset($inData['startIndex']) ||*/ !isset($inData['endIndex'])/* || !isset($inData['userId']) || !isset($inData['firstName']) || !isset($inData['lastName'])*/) {
+	if (/*!isset($inData['startIndex']) || !isset($inData['endIndex']) ||*/ !isset($inData['userId']) /*|| !isset($inData['firstName']) || !isset($inData['lastName'])*/) {
 		returnWithError("Invalid input", 400);
 		return;
 	}
