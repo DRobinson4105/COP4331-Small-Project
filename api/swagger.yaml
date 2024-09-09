@@ -1,0 +1,60 @@
+swagger: '2.0'
+info:
+  title: Glasses8P App
+  description: This is the API documentation for the Glasses8P App including user signup, login, and contact management
+  version: 1.0.0
+  contact:
+    email: drobinson@ucf.edu
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /SignUp.php:
+    post:
+      tags:
+      - Users
+      summary: Signs up for an account for the Glasses8P App
+      operationId: doSignUp
+      description: Signs up for an account for the Glasses8P App
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: signUpItem
+        description: signUp
+        schema:
+          $ref: '#/definitions/SignUp'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Invalid Input
+        404:
+          description: URL Not Found
+        409:
+          description: Account with provided username already exists
+        500:
+          description: Server Error
+
+definitions:
+  SignUp:
+    type: object
+    required:
+    - login
+    - password
+    properties:
+      login:
+        type: string
+        example: "RickL"
+      password:
+        type: string
+        example: "password"
+
+host: glasses8p.online
+basePath: /api
+schemes:
+- http
