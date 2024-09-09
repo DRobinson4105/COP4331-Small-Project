@@ -1,5 +1,4 @@
 <?php
-
 	$inData = getRequestInfo();
 
 	if (!isset($inData['startIndex']) || !isset($inData['endIndex']) || !isset($inData['userId']) || !isset($inData['firstName']) || !isset($inData['lastName'])) {
