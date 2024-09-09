@@ -2,7 +2,7 @@
 
 	$inData = getRequestInfo();
 
-	if (!isset($inData['startIndex']) || !isset($inData['endIndex']) || !isset($inData['UserId']) || !isset($inData['search'])) {
+	if (!isset($inData['startIndex']) || !isset($inData['endIndex']) || !isset($inData['UserId']) || !isset($inData['firstName']) || !isset($inData['lastName'])) {
 		returnWithError("Invalid input", 400);
 		return;
 	}
@@ -29,8 +29,9 @@
 	{
         //Search through names 
         $stmt = $conn->prepare("select * from Contacts where UserID=? and FirstName like ? or LastName like ? LIMIT ? OFFSET ?");
-		$contactName = "%" . $inData["search"] . "%";
-		$stmt->bind_param("sssss", $inData["UserId"], $contactName, $contactName, $Limit, $startIndex); 
+		$contactFName = "%" . $inData["firstName"] . "%";
+		$contactLName = "%" . $inData["lastName"] . "%";
+		$stmt->bind_param("sssss", $inData["UserId"], $contactFName, $contactLName, $Limit, $startIndex); 
 		$stmt->execute();
 		
 		$result = $stmt->get_result();
