@@ -58,3 +58,118 @@ host: glasses8p.online
 basePath: /api
 schemes:
 - http
+
+paths:
+  /Login.php:
+    post:
+      tags:
+      - Users
+      summary: Checks the inputted user information to see if it matches an account in the system and returns ID
+      operationId: doLogin
+      description: Matches input with an existing account and returns ID
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: loginItem
+        description: login
+        schema:
+          $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The ID of the user who logged info
+                    example: '1'
+        400:
+          description: Invalid Input (username or password does not match)
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error (Could not Login right now)
+
+definitions:
+  Login:
+    type: object
+    required:
+    - login
+    - password
+    properties:
+      login:
+        type: string
+        example: "RickL"
+      password:
+        type: string
+        example: "password"
+
+host: glasses8p.online
+basePath: /api
+schemes:
+- http
+
+paths:
+  /AddContact.php:
+    post:
+      tags:
+      - Contacts
+      summary: Adds a contact to the Contacts table
+      operationId: doAddContact
+      description: Adds a contact to the Contacts table
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: addContactItem
+        description: addContact
+        schema:
+          $ref: '#/definitions/AddContact'
+      responses:
+        200:
+          description: Successfully added contact
+        400:
+          description: Invalid Input (username or password does not match)
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error (Could not Login right now)
+
+definitions:
+  AddContact:
+    type: object
+    required:
+    - firstName
+    - lastName
+    - userId
+    - phoneNumber
+    - email
+    properties:
+      firstName:
+        type: string
+        example: "Rick"
+      lastName:
+        type: string
+        example: "L"
+      userId:
+        type: string
+        example: "1"
+      phoneNumber:
+        type: string
+        example: "111-111-1111"
+      email:
+        type: string
+        example: "RickL@test.com"
+
+host: glasses8p.online
+basePath: /api
+schemes:
+- http
