@@ -11,7 +11,7 @@
 	$lastName = $inData["lastName"];
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
-    $fullName = $firstfName.' '.$lastName;
+    	$fullName = $firstName.' '.$lastName;
 
 	// error_reporting(E_ALL);
 	// ini_set('display_errors', 1);
