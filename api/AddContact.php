@@ -13,7 +13,7 @@
 	$userId = $inData["userId"];
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
-    	$fullName = $fName . $lName;
+    	$fullName = $fName. ' ' .$lName;
 	
 	$database_username = "User";
 	$database_password = "COP4331OMg";
