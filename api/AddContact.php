@@ -13,6 +13,7 @@
 	$userId = $inData["userId"];
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
+    	$fullName = $fName + " " + $lName;
 	
 	$database_username = "User";
 	$database_password = "COP4331OMg";
@@ -26,8 +27,8 @@
 	else
 	{
 		//Parameters maybe different as we need a name, phone number, email
-		$stmt = $conn->prepare("INSERT into Contacts (UserId,FirstName,LastName,Phone,Email) VALUES(?,?,?,?,?)");
-		$stmt->bind_param("sssss", $userId, $fName, $lName, $phoneNum, $email);
+		$stmt = $conn->prepare("INSERT into Contacts (UserId,FullName,FirstName,LastName,Phone,Email) VALUES(?,?,?,?,?)");
+		$stmt->bind_param("ssssss", $userId, $fullName, $fName, $lName, $phoneNum, $email);
 		if($stmt->execute()){
 			$stmt->close();
 			
