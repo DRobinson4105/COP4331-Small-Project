@@ -279,7 +279,7 @@ function addContact(newRow) {
 
     const edit = document.createElement("img");
     edit.src = "images/edit.png";
-    edit.style = "width: 20%; height: 20%";
+    edit.style = "width: 16%; height: 16%";
     newRow.children[4].appendChild(edit);
     // Make API call
 }
