@@ -29,7 +29,7 @@
         //Search through names 
         $stmt = $conn->prepare("select * from Contacts where UserID=? and FullName like ? LIMIT ? OFFSET ?");
 		$contactFullName = "%" . $inData["fullName"] . "%";
-		$stmt->bind_param("ssss", $inData["UserId"], $contactFullName, $Limit, $startIndex); 
+		$stmt->bind_param("ssss", $inData["userId"], $contactFullName, $Limit, $startIndex); 
 		$stmt->execute();
 		
 		$result = $stmt->get_result();
