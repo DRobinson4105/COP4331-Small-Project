@@ -14,6 +14,7 @@
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
     	$fullName = $fName. ' ' .$lName;
+	echo 'Here';
 	
 	$database_username = "User";
 	$database_password = "COP4331OMg";
