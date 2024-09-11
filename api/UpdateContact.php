@@ -11,6 +11,7 @@
 	$lastName = $inData["lastName"];
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
+    	$fullName = $firstName.' '.$lastName;
 
 	// error_reporting(E_ALL);
 	// ini_set('display_errors', 1);
@@ -23,8 +24,8 @@
 	else
 	{
 		//add more update parameters for email & phone
-		$stmt = $conn->prepare("UPDATE Contacts SET FirstName=?, LastName=?, Phone=?, Email=? WHERE id = ?");
-		$stmt->bind_param("sssss", $firstName, $lastName, $phoneNum, $email, $Id);
+		$stmt = $conn->prepare("UPDATE Contacts SET FullName=?, FirstName=?, LastName=?, Phone=?, Email=? WHERE id = ?");
+		$stmt->bind_param("ssssss", $fullName, $firstName, $lastName, $phoneNum, $email, $Id);
 		if ($stmt->execute()) 
 		{
 			$stmt->close();
