@@ -40,26 +40,6 @@ paths:
         500:
           description: Server Error
 
-definitions:
-  SignUp:
-    type: object
-    required:
-    - login
-    - password
-    properties:
-      login:
-        type: string
-        example: "RickL"
-      password:
-        type: string
-        example: "password"
-
-host: glasses8p.online
-basePath: /api
-schemes:
-- http
-
-paths:
   /Login.php:
     post:
       tags:
@@ -96,26 +76,6 @@ paths:
         500:
           description: Server Error (Could not Login right now)
 
-definitions:
-  Login:
-    type: object
-    required:
-    - login
-    - password
-    properties:
-      login:
-        type: string
-        example: "RickL"
-      password:
-        type: string
-        example: "password"
-
-host: glasses8p.online
-basePath: /api
-schemes:
-- http
-
-paths:
   /AddContact.php:
     post:
       tags:
@@ -143,7 +103,35 @@ paths:
         500:
           description: Server Error (Could not Login right now)
 
+
+
 definitions:
+  SignUp:
+    type: object
+    required:
+    - login
+    - password
+    properties:
+      login:
+        type: string
+        example: "RickL"
+      password:
+        type: string
+        example: "password"
+
+  Login:
+    type: object
+    required:
+    - login
+    - password
+    properties:
+      login:
+        type: string
+        example: "RickL"
+      password:
+        type: string
+        example: "password"
+
   AddContact:
     type: object
     required:
@@ -168,6 +156,8 @@ definitions:
       email:
         type: string
         example: "RickL@test.com"
+
+
 
 host: glasses8p.online
 basePath: /api
