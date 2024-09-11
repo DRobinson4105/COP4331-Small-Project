@@ -28,7 +28,7 @@
 	else
 	{
 		//Parameters maybe different as we need a name, phone number, email
-		$stmt = $conn->prepare("INSERT into Contacts (UserId,FullName,FirstName,LastName,Phone,Email) VALUES(?,?,?,?,?)");
+		$stmt = $conn->prepare("INSERT into Contacts (UserId,FullName,FirstName,LastName,Phone,Email) VALUES(?,?,?,?,?,?)");
 		$stmt->bind_param("ssssss", $userId, $fullName, $fName, $lName, $phoneNum, $email);
 		if($stmt->execute()){
 			$stmt->close();
