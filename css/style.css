@@ -17,7 +17,7 @@ input {
     text-align: center;
     font-family: "Judson";
     font-size: 150%;
-    background-color:#F2E5E5;
+    background-color:#F6F5EF;
     height: 37px;
     width: 375px;
 }
@@ -25,7 +25,7 @@ input {
 button {
     font-family: "Judson";
     background-color:#486B79;
-    color: #F2E5E5;
+    color: #F6F5EF;
     width: 150px;
     border: none;
     border-radius: 30px;
@@ -50,7 +50,7 @@ table {
 }
 
 tr {
-    background-color: #F2E5E5;
+    background-color: #F6F5EF;
 }
 
 td {

@@ -178,7 +178,7 @@ function searchContact()
             {
                 let jsonObject = JSON.parse( xhr.responseText );
                 let table = document.createElement('table');
-                table.style.backgroundColor = "#F2E5E5";
+                table.style.backgroundColor = "#D0BFB4";
                 table.id = "contactTable";
                 for( let i=0; i<jsonObject.results[0].length; i++ )
                 {
@@ -231,9 +231,9 @@ function newRow() {
     let table = document.getElementById("contactTable");
     if(table == undefined) {
         table = document.createElement('table');
-        table.style.backgroundColor = "#F2E5E5";
+        table.style.backgroundColor = "#F6F5EF";
         table.id = "contactTable";
-	document.getElementById("contactSearchResult").appendChild(table);
+	    document.getElementById("contactSearchResult").appendChild(table);
     }
     let newRow = table.insertRow(0);
     for(var i = 0; i < 5; i++) {
@@ -245,11 +245,13 @@ function newRow() {
             newCell.style.justifyContent = "space-evenly";
             newCell.style.paddingLeft = "0px";
             newCell.style.padding = "2px";
+
             const apply = document.createElement("img");
             apply.src = "images/confirm.png";
             apply.style = "width: 23%; height: 23%";
-            // Add onclick
+            apply.onclick = function(){addContact(newRow)};
             newCell.appendChild(apply);
+
             const discard = document.createElement("img");
             discard.src = "images/discard.png";
             discard.style = "width: 18%; height: 18%";
@@ -265,8 +267,19 @@ function newRow() {
     }
 }
 
-function addContact(e) {
+function addContact(newRow) {
     // Get row with new contact information
-    // Make text fields uneditable and reset style
+    for(let i = 0; i < 5; i++) {
+        newRow.children[i].contentEditable = false;
+        newRow.children[i].style.backgroundColor = "#F6F5EF";
+    }
+
+    newRow.children[4].innerHTML = "";
+    newRow.children[4].style.padding = "0px";
+
+    const edit = document.createElement("img");
+    edit.src = "images/edit.png";
+    edit.style = "width: 20%; height: 20%";
+    newRow.children[4].appendChild(edit);
     // Make API call
 }
