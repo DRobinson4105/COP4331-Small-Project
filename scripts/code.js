@@ -162,8 +162,8 @@ function searchContact()
 
     let contactList = "";
 
-	let tmp = {search:srch,UserId:userId,startIndex:startIdx,endIndex:endIdx};
-	let jsonPayload = JSON.stringify( tmp );
+    let tmp = {fullName:srch,userId:userId,startIndex:startIdx,endIndex:endIdx};
+    let jsonPayload = JSON.stringify( tmp );
 
     let url = urlBase + '/SearchContacts.' + extension;
 
@@ -199,13 +199,16 @@ function searchContact()
                     var lastNameText = document.createTextNode(jsonObject["results"][0][i]["lastName"]);
                     var emailText = document.createTextNode(jsonObject["results"][0][i]["email"]);
                     var phoneNumText = document.createTextNode(jsonObject["results"][0][i]["phone"]);
-                    var editText = document.createTextNode("");
+                    
+                    const editIcon = document.createElement("img");
+                    editIcon.src = "images/edit.png";
+                    editIcon.style = "width: 14%; height: 14%";
+                    edit.appendChild(editIcon);
                     
                     firstName.appendChild(firstNameText);
                     lastName.appendChild(lastNameText);
                     email.appendChild(emailText);
                     phoneNum.appendChild(phoneNumText);
-                    edit.appendChild(editText);
 
                     tr.appendChild(firstName);
                     tr.appendChild(lastName);
@@ -268,18 +271,45 @@ function newRow() {
 }
 
 function addContact(newRow) {
-    // Get row with new contact information
-    for(let i = 0; i < 5; i++) {
-        newRow.children[i].contentEditable = false;
-        newRow.children[i].style.backgroundColor = "#F6F5EF";
+    let firstName = newRow.children[0].innerText;
+    let lastName = newRow.children[1].innerText;
+    let email = newRow.children[2].innerText;
+    let phone = newRow.children[3].innerText;
+    
+    let tmp = {firstName:firstName,lastName:lastName,userId:userId,phoneNumber:phone,email:email};
+	let jsonPayload = JSON.stringify( tmp );
+
+    let url = urlBase + '/AddContact.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try
+    {
+        xhr.send(jsonPayload);
+
+        xhr.onreadystatechange = function() 
+        {
+            if (this.readyState == 4 && this.status == 200) 
+            {
+                // Visual feedback to user
+                for(let i = 0; i < 5; i++) {
+                    newRow.children[i].contentEditable = false;
+                    newRow.children[i].style.backgroundColor = "#F6F5EF";
+                }
+                
+                newRow.children[4].innerHTML = "";
+
+                const edit = document.createElement("img");
+                edit.src = "images/edit.png";
+                edit.style = "width: 14%; height: 14%";
+                newRow.children[4].appendChild(edit);
+            }
+        }
     }
-
-    newRow.children[4].innerHTML = "";
-    newRow.children[4].style.padding = "0px";
-
-    const edit = document.createElement("img");
-    edit.src = "images/edit.png";
-    edit.style = "width: 16%; height: 16%";
-    newRow.children[4].appendChild(edit);
-    // Make API call
+    catch(err)
+    {
+        console.log("Error: Could not add contact");
+    }
 }
