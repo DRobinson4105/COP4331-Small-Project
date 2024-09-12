@@ -183,7 +183,7 @@ function searchContact()
                 for( let i=0; i<jsonObject.results[0].length; i++ )
                 {
                     var tr = document.createElement('tr');
-                    tr.id = jsonObjec["results"][0][i]["id"];
+                    tr.id = jsonObject["results"][0][i]["id"];
 
                     var firstName = document.createElement('td');
                     var lastName = document.createElement('td');
