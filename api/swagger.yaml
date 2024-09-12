@@ -103,6 +103,34 @@ paths:
         500:
           description: Server Error (Could not Login right now)
 
+  /DeleteContact.php:
+    post:
+      tags:
+      - Contacts
+      summary: Deletes a contact the user holds
+      operationId: doDeleteContact
+      description: Deletes a contact the user holds
+     consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: deleteContactItem
+        description: delete contact
+        schema:
+          $ref: '#/definitions/DeleteContact'
+      responses:
+        200:
+          description: Contact successfully deleted
+        400:
+          description: Invalid Input
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error
+
+
 
 
 definitions:
@@ -156,6 +184,16 @@ definitions:
       email:
         type: string
         example: "RickL@test.com"
+
+  DeleteContact:
+    type: object
+    required:
+    - id
+    properties:
+      id:
+        type: string
+        example: "2"
+
 
 
 
