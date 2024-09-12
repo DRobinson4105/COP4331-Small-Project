@@ -205,7 +205,7 @@ function searchContact()
                     editIcon.src = "images/edit.png";
                     editIcon.style = "width: 14%; height: 14%";
                     edit.appendChild(editIcon);
-                    edit.onclick = function(){editRow(this.parentElement.parentElement)};
+                    edit.onclick = function(){editRow(this.parentElement)};
                     
                     
                     firstName.appendChild(firstNameText);
