@@ -11,7 +11,7 @@
 	$userId = $inData["userId"];
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
-	
+
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		returnWithError("Email is not valid.", 400);
 		return;
@@ -34,7 +34,7 @@
 
 		if ($stmt->execute()) {
 			$id = $conn->insert_id;
-			returnWithError($id);
+			returnWithInfo($id);
 		} else {
 			returnWithError("Contact could not be added at this time", 500);
 		}
