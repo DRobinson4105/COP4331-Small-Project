@@ -395,4 +395,5 @@ function updateContact()
 //     {
 //         console.log("Error: Could not add contact");
 //     }
+
 }
