@@ -19,7 +19,8 @@
 	$database_name = "COP4331";
 
 	# connect to the database
-	$conn = new mysqli("localhost", $database_username, $database_password, $database_name); 	
+	$conn = new mysqli("localhost", $database_username, $database_password, $database_name);
+		
 	if ($conn->connect_error) {
 		returnWithError( $conn->connect_error, 500);
     } else {

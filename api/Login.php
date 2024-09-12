@@ -1,65 +1,61 @@
 <?php
-        $inData = getRequestInfo();
+	$inData = getRequestInfo();
 
-        if (!isset($inData['login']) || !isset($inData['password'])) {
-                returnWithError("Invalid input", 400);
-                return;
-        }
+	if (!isset($inData['login']) || !isset($inData['password'])) {
+		returnWithError("Invalid input", 400);
+		return;
+	}
 
-        $id = 0;
-        $firstName = "";
-        $lastName = "";
+	$id = 0;
+	$firstName = "";
+	$lastName = "";
 
-        // database credentials
-        $database_username = "User";
-        $database_password = "COP4331OMg";
-        $database_name = "COP4331";
+	// database credentials
+	$database_username = "User";
+	$database_password = "COP4331OMg";
+	$database_name = "COP4331";
 
-        $conn = new mysqli("localhost", $database_username, $database_password, $database_name);
-        if ($conn->connect_error) {
-                returnWithError($conn->connect_error, 500);
-        } else {
-                $stmt = $conn->prepare("SELECT ID FROM Users WHERE Login=? AND Password =?");
-                $stmt->bind_param("ss", $inData["login"], $inData["password"]);
-                if ($stmt->execute()) {
-                        $result = $stmt->get_result();
+	$conn = new mysqli("localhost", $database_username, $database_password, $database_name);
+	
+	if ($conn->connect_error) {
+		returnWithError($conn->connect_error, 500);
+	} else {
+		$stmt = $conn->prepare("SELECT ID FROM Users WHERE Login=? AND Password =?");
+		$stmt->bind_param("ss", $inData["login"], $inData["password"]);
 
-                        if ($row = $result->fetch_assoc()) {
-                                returnWithInfo($row['ID']);
-                        } else {
-                                returnWithError("Username or password is wrong", 400);
-                        }
-                }
-                else{
-                        returnWithError("Could not login right now.", 500);
-                }
+		if ($stmt->execute()) {
+			$result = $stmt->get_result();
 
-                $stmt->close();
-                $conn->close();
-        }
+			if ($row = $result->fetch_assoc()) {
+				returnWithInfo($row['ID']);
+			} else {
+				returnWithError("Username or password is wrong", 400);
+			}
+		} else {
+			returnWithError("Unable to process the login request at this time. Please try again later.", 500);
+		}
 
-        function getRequestInfo()
-        {
-                return json_decode(file_get_contents('php://input'), true);
-        }
+		$stmt->close();
+		$conn->close();
+	}
 
-        function sendResultInfoAsJson($obj)
-        {
-                header('Content-type: application/json');
-                echo $obj;
-        }
+	function getRequestInfo() {
+		return json_decode(file_get_contents('php://input'), true);
+	}
 
-        function returnWithError($err, $code)
-        {
-                $retValue = '{"id":-1,"error":"' . $err . '"}';
-                http_response_code($code);
-                sendResultInfoAsJson($retValue);
-        }
+	function sendResultInfoAsJson($obj) {
+		header('Content-type: application/json');
+		echo $obj;
+	}
 
-        function returnWithInfo($id)
-        {
-                $retValue = '{"id":' . $id . ',"error":""}';
-                sendResultInfoAsJson($retValue);
-        }
+	function returnWithError($err, $code) {
+		$retValue = '{"id":-1,"error":"' . $err . '"}';
+		http_response_code($code);
+		sendResultInfoAsJson($retValue);
+	}
 
+	function returnWithInfo($id) {
+		$retValue = '{"id":' . $id . ',"error":""}';
+		sendResultInfoAsJson($retValue);
+	}
 ?>
