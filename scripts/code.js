@@ -178,11 +178,12 @@ function searchContact()
             {
                 let jsonObject = JSON.parse( xhr.responseText );
                 let table = document.createElement('table');
-                table.style.backgroundColor = "#D0BFB4";
+                table.style.backgroundColor = "#000000";
                 table.id = "contactTable";
                 for( let i=0; i<jsonObject.results[0].length; i++ )
                 {
                     var tr = document.createElement('tr');
+                    tr.id = jsonObject(["results"][0][i]["id"]);
 
                     var firstName = document.createElement('td');
                     var lastName = document.createElement('td');
@@ -204,6 +205,8 @@ function searchContact()
                     editIcon.src = "images/edit.png";
                     editIcon.style = "width: 14%; height: 14%";
                     edit.appendChild(editIcon);
+                    edit.onclick = function(){editRow(this.parentElement.parentElement)};
+                    
                     
                     firstName.appendChild(firstNameText);
                     lastName.appendChild(lastNameText);
@@ -293,6 +296,9 @@ function addContact(newRow) {
         {
             if (this.readyState == 4 && this.status == 200) 
             {
+                let jsonObject = JSON.parse( xhr.responseText );
+                newRow.id = jsonObject["results"][0][i]["id"];
+                
                 // Visual feedback to user
                 for(let i = 0; i < 5; i++) {
                     newRow.children[i].contentEditable = false;
@@ -303,7 +309,8 @@ function addContact(newRow) {
 
                 const edit = document.createElement("img");
                 edit.src = "images/edit.png";
-                edit.style = "width: 14%; height: 14%";
+                edit.style = "width: 14%; height: 14%"
+                edit.onclick = function(){editRow(newRow)};
                 newRow.children[4].appendChild(edit);
             }
         }
@@ -312,4 +319,80 @@ function addContact(newRow) {
     {
         console.log("Error: Could not add contact");
     }
+}
+
+function editRow(currRow)
+{
+
+    let table = document.getElementById("contactTable");
+    for (i = 0; i < 5; i++)
+    {
+        if (i == 4)
+        {
+            currRow.children[4].innerHTML = "";
+
+            const apply = document.createElement("img");
+            apply.src = "images/confirm.png";
+            apply.style = "width: 23%; height: 23%";
+            apply.onclick = function(){updateContact()};
+            currRow.children[4].appendChild(apply);
+
+            const discard = document.createElement("img");
+            discard.src = "images/discard.png";
+            discard.style = "width: 18%; height: 18%";
+            currRow.children[4].appendChild(discard);
+        }
+
+        else 
+        {
+            currRow.children[i].contentEditable = true;
+            currRow.children[i].style.backgroundColor = "#D0BFB4";
+        }
+    }
+}
+
+function updateContact()
+{
+//     let firstName = newRow.children[0].innerText;
+//     let lastName = newRow.children[1].innerText;
+//     let email = newRow.children[2].innerText;
+//     let phone = newRow.children[3].innerText;
+    
+//     let tmp = {firstName:firstName,lastName:lastName,contactID:contactID,phoneNumber:phone,email:email};
+// 	let jsonPayload = JSON.stringify( tmp );
+
+//     let url = urlBase + '/AddContact.' + extension;
+
+//     let xhr = new XMLHttpRequest();
+//     xhr.open("POST", url, true);
+//     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+//     try
+//     {
+//         xhr.send(jsonPayload);
+
+//         xhr.onreadystatechange = function() 
+//         {
+//             if (this.readyState == 4 && this.status == 200) 
+//             {
+//                 // Visual feedback to user
+//                 for(let i = 0; i < 5; i++) {
+//                     newRow.children[i].contentEditable = false;
+//                     newRow.children[i].style.backgroundColor = "#F6F5EF";
+//                 }
+                
+//                 newRow.children[4].innerHTML = "";
+
+//                 const edit = document.createElement("img");
+//                 edit.src = "images/edit.png";
+//                 edit.style = "width: 14%; height: 14%"
+//                 edit.onclick = function(){editRow(newRow)};
+//                 newRow.children[4].appendChild(edit);
+//             }
+//         }
+//     }
+//     catch(err)
+//     {
+//         console.log("Error: Could not add contact");
+//     }
 }
