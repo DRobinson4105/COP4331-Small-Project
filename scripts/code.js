@@ -58,7 +58,7 @@ function doLogin()
     
                 window.location.href = "CURD.html";
             }
-            else {
+            else if(this.status != 200) {
                 const errorMessage = document.createElement("div");
 
                 const errorIcon = document.createElement("img");
@@ -146,7 +146,7 @@ function doSignUp()
     
                 window.location.href = "CURD.html";
             }
-            else {
+            else if(this.status != 200) {
                 const errorMessage = document.createElement("div");
 
                 const errorIcon = document.createElement("img");
