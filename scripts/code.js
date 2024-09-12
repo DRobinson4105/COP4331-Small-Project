@@ -35,7 +35,19 @@ function doLogin()
         
                 if( userId < 1 )
                 {        
-                    document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
+                    const errorMessage = document.createElement("div");
+
+                    const errorIcon = document.createElement("img");
+                    errorIcon.src = "images/error.png";
+                    errorIcon.style = "width: 1%; height: 1%";
+
+                    const errorText = document.createTextNode(" User/Password combination incorrect");
+
+                    errorMessage.appendChild(errorIcon);
+                    errorMessage.appendChild(errorText);
+
+                    document.getElementById("loginResult").innerHTML = "";
+                    document.getElementById("loginResult").appendChild(errorMessage);
                     return;
                 }
         
@@ -46,12 +58,39 @@ function doLogin()
     
                 window.location.href = "CURD.html";
             }
+            else {
+                const errorMessage = document.createElement("div");
+
+                const errorIcon = document.createElement("img");
+                errorIcon.src = "images/error.png";
+                errorIcon.style = "width: 1%; height: 1%";
+
+                const errorText = document.createTextNode(" User/Password combination incorrect");
+
+                errorMessage.appendChild(errorIcon);
+                errorMessage.appendChild(errorText);
+
+                document.getElementById("loginResult").innerHTML = "";
+                document.getElementById("loginResult").appendChild(errorMessage);
+            }
         };
         xhr.send(jsonPayload);
     }
     catch(err)
     {
-        document.getElementById("loginResult").innerHTML = err.message;
+        const errorMessage = document.createElement("div");
+
+        const errorIcon = document.createElement("img");
+        errorIcon.src = "images/error.png";
+        errorIcon.style = "width: 1%; height: 1%";
+
+        const errorText = document.createTextNode(" " + err.message);
+
+        errorMessage.appendChild(errorIcon);
+        errorMessage.appendChild(errorText);
+
+        document.getElementById("loginResult").innerHTML = "";
+        document.getElementById("loginResult").appendChild(errorMessage);
     }
 
 }
@@ -84,7 +123,19 @@ function doSignUp()
         
                 if( userId < 1 )
                 {        
-                    document.getElementById("loginResult").innerHTML = "User already exists";
+                    const errorMessage = document.createElement("div");
+
+                    const errorIcon = document.createElement("img");
+                    errorIcon.src = "images/error.png";
+                    errorIcon.style = "width: 1%; height: 1%";
+
+                    const errorText = document.createTextNode(" User already exists");
+
+                    errorMessage.appendChild(errorIcon);
+                    errorMessage.appendChild(errorText);
+
+                    document.getElementById("loginResult").innerHTML = "";
+                    document.getElementById("loginResult").appendChild(errorMessage);
                     return;
                 }
         
@@ -95,12 +146,39 @@ function doSignUp()
     
                 window.location.href = "CURD.html";
             }
+            else {
+                const errorMessage = document.createElement("div");
+
+                const errorIcon = document.createElement("img");
+                errorIcon.src = "images/error.png";
+                errorIcon.style = "width: 1%; height: 1%";
+
+                const errorText = document.createTextNode(" User already exists");
+
+                errorMessage.appendChild(errorIcon);
+                errorMessage.appendChild(errorText);
+
+                document.getElementById("loginResult").innerHTML = "";
+                document.getElementById("loginResult").appendChild(errorMessage);
+            }
         };
         xhr.send(jsonPayload);
     }
     catch(err)
     {
-        document.getElementById("loginResult").innerHTML = err.message;
+        const errorMessage = document.createElement("div");
+
+        const errorIcon = document.createElement("img");
+        errorIcon.src = "images/error.png";
+        errorIcon.style = "width: 1%; height: 1%";
+
+        const errorText = document.createTextNode(" " + err.message);
+
+        errorMessage.appendChild(errorIcon);
+        errorMessage.appendChild(errorText);
+
+        document.getElementById("loginResult").innerHTML = "";
+        document.getElementById("loginResult").appendChild(errorMessage);
     }
 
 }
