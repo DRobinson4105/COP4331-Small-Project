@@ -375,7 +375,7 @@ function addContact(newRow) {
             if (this.readyState == 4 && this.status == 200) 
             {
                 let jsonObject = JSON.parse( xhr.responseText );
-                newRow.id = jsonObject["results"][0][i]["id"];
+                newRow.id = jsonObject["id"];
                 
                 // Visual feedback to user
                 for(let i = 0; i < 5; i++) {
