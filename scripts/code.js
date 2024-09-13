@@ -269,10 +269,10 @@ function searchContact()
                     var phoneNum = document.createElement('td');
                     var edit = document.createElement('td');
 
-		    edit.style.width = "140px";
-		    edit.style.display = "flex";
+		            edit.style.width = "140px";
+		            edit.style.display = "flex";
                     edit.style.justifyContent = "space-evenly";
-		    edit.style.paddingLeft = "0px";
+		            edit.style.paddingLeft = "0px";
                 
                     var firstNameText = document.createTextNode(jsonObject["results"][0][i]["firstName"]);
                     var lastNameText = document.createTextNode(jsonObject["results"][0][i]["lastName"]);
@@ -412,7 +412,7 @@ function editRow(currRow)
             const apply = document.createElement("img");
             apply.src = "images/confirm.png";
             apply.style = "width: 23%; height: 23%";
-            apply.onclick = function(){updateContact()};
+            apply.onclick = function(){updateContact(currRow)};
             currRow.children[4].appendChild(apply);
 
             const discard = document.createElement("img");
@@ -429,49 +429,49 @@ function editRow(currRow)
     }
 }
 
-function updateContact()
+function updateContact(curRow)
 {
-//     let firstName = newRow.children[0].innerText;
-//     let lastName = newRow.children[1].innerText;
-//     let email = newRow.children[2].innerText;
-//     let phone = newRow.children[3].innerText;
+    let firstName = curRow.children[0].innerText;
+    let lastName = curRow.children[1].innerText;
+    let email = curRow.children[2].innerText;
+    let phone = curRow.children[3].innerText;
+    let contactID = curRow.id;
     
-//     let tmp = {firstName:firstName,lastName:lastName,contactID:contactID,phoneNumber:phone,email:email};
-// 	let jsonPayload = JSON.stringify( tmp );
+    let tmp = {firstName:firstName,lastName:lastName,contactID:contactID,phoneNumber:phone,email:email};
+	let jsonPayload = JSON.stringify( tmp );
 
-//     let url = urlBase + '/AddContact.' + extension;
+    let url = urlBase + '/UpdateContact.' + extension;
 
-//     let xhr = new XMLHttpRequest();
-//     xhr.open("POST", url, true);
-//     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
-//     try
-//     {
-//         xhr.send(jsonPayload);
+    try
+    {
+        xhr.send(jsonPayload);
 
-//         xhr.onreadystatechange = function() 
-//         {
-//             if (this.readyState == 4 && this.status == 200) 
-//             {
-//                 // Visual feedback to user
-//                 for(let i = 0; i < 5; i++) {
-//                     newRow.children[i].contentEditable = false;
-//                     newRow.children[i].style.backgroundColor = "#F6F5EF";
-//                 }
+        xhr.onreadystatechange = function() 
+        {
+            if (this.readyState == 4 && this.status == 200) 
+            {
+                // Visual feedback to user
+                for(let i = 0; i < 5; i++) {
+                    curRow.children[i].contentEditable = false;
+                    curRow.children[i].style.backgroundColor = "#F6F5EF";
+                }
                 
-//                 newRow.children[4].innerHTML = "";
+                curRow.children[4].innerHTML = "";
 
-//                 const edit = document.createElement("img");
-//                 edit.src = "images/edit.png";
-//                 edit.style = "width: 14%; height: 14%"
-//                 edit.onclick = function(){editRow(newRow)};
-//                 newRow.children[4].appendChild(edit);
-//             }
-//         }
-//     }
-//     catch(err)
-//     {
-//         console.log("Error: Could not add contact");
-//     }
-
+                const edit = document.createElement("img");
+                edit.src = "images/edit.png";
+                edit.style = "width: 14%; height: 14%"
+                edit.onclick = function(){editRow(curRow)};
+                curRow.children[4].appendChild(edit);
+            }
+        }
+    }
+    catch(err)
+    {
+        console.log("Error: Could not add contact");
+    }
 }
