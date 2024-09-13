@@ -16,6 +16,11 @@
 		returnWithError("Email is not valid.", 400);
 		return;
 	}
+  
+  if($fName == "" && $lName == ""){
+    returnWithError("First name and last name cannot be empty", 400);
+      return;
+  }
 
 	$fullName = $fName.' '.$lName;
 	
