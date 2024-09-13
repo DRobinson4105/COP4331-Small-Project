@@ -20,7 +20,7 @@
 	} else {
 		//add more update parameters for email & phone
 		$stmt = $conn->prepare("UPDATE Contacts SET FullName=?, FirstName=?, LastName=?, Phone=?, Email=? WHERE id = ?");
-		$stmt->bind_param("ssssss", $fullName, $firstName, $lastName, $phoneNum, $email, $Id);
+		$stmt->bind_param("ssssss", $fullName, $firstName, $lastName, $phoneNum, $email, $id);
 		if ($stmt->execute()) {
 			returnWithInfo();
 		} else {
