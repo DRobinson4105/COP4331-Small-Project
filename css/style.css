@@ -47,7 +47,6 @@ table {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    overflow-x: scroll;
 }
 
 tr {
