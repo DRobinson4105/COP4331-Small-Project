@@ -238,8 +238,10 @@ function searchContact()
     let srch = document.getElementById("searchText").value;
     document.getElementById("contactSearchResult").innerHTML = "";
 
+    let contactList = "";
+
     let tmp = {fullName:srch,userId:userId,startIndex:startIdx,endIndex:endIdx};
-    let jsonPayload = JSON.stringify(tmp);
+    let jsonPayload = JSON.stringify( tmp );
 
     let url = urlBase + '/SearchContacts.' + extension;
 
@@ -252,53 +254,43 @@ function searchContact()
         {
             if (this.readyState == 4 && this.status == 200) 
             {
-                let jsonObject = JSON.parse(xhr.responseText);
+                let jsonObject = JSON.parse( xhr.responseText );
                 let table = document.createElement('table');
                 table.style.backgroundColor = "#000000";
                 table.id = "contactTable";
-                
-                for(let i = 0; i < jsonObject.results[0].length; i++)
+                for( let i=0; i<jsonObject.results[0].length; i++ )
                 {
-                    let tr = document.createElement('tr');
+                    var tr = document.createElement('tr');
                     tr.id = jsonObject["results"][0][i]["id"];
 
-                    let firstName = document.createElement('td');
-                    let lastName = document.createElement('td');
-                    let email = document.createElement('td');
-                    let phoneNum = document.createElement('td');
-                    let edit = document.createElement('td');
+                    var firstName = document.createElement('td');
+                    var lastName = document.createElement('td');
+                    var email = document.createElement('td');
+                    var phoneNum = document.createElement('td');
+                    var edit = document.createElement('td');
 
 		            edit.style.width = "140px";
 		            edit.style.display = "flex";
                     edit.style.justifyContent = "space-evenly";
 		            edit.style.paddingLeft = "0px";
-
-                    // Create span elements
-                    let firstNameSpan = document.createElement('span');
-                    let lastNameSpan = document.createElement('span');
-                    let emailSpan = document.createElement('span');
-                    let phoneNumSpan = document.createElement('span');
+                
+                    var firstNameText = document.createTextNode(jsonObject["results"][0][i]["firstName"]);
+                    var lastNameText = document.createTextNode(jsonObject["results"][0][i]["lastName"]);
+                    var emailText = document.createTextNode(jsonObject["results"][0][i]["email"]);
+                    var phoneNumText = document.createTextNode(jsonObject["results"][0][i]["phone"]);
                     
-                    // Assign text to spans
-                    firstNameSpan.textContent = jsonObject["results"][0][i]["firstName"];
-                    lastNameSpan.textContent = jsonObject["results"][0][i]["lastName"];
-                    emailSpan.textContent = jsonObject["results"][0][i]["email"];
-                    phoneNumSpan.textContent = jsonObject["results"][0][i]["phone"];
-
-                    // Append spans to table data cells
-                    firstName.appendChild(firstNameSpan);
-                    lastName.appendChild(lastNameSpan);
-                    email.appendChild(emailSpan);
-                    phoneNum.appendChild(phoneNumSpan);
-
-                    // Create edit icon
                     const editIcon = document.createElement("img");
                     editIcon.src = "images/edit.png";
                     editIcon.style = "width: 14%; height: 14%";
                     edit.appendChild(editIcon);
                     edit.onclick = function(){editRow(this.parentElement)};
+                    
+                    
+                    firstName.appendChild(firstNameText);
+                    lastName.appendChild(lastNameText);
+                    email.appendChild(emailText);
+                    phoneNum.appendChild(phoneNumText);
 
-                    // Append all elements to the row
                     tr.appendChild(firstName);
                     tr.appendChild(lastName);
                     tr.appendChild(email);
