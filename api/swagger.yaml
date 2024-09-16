@@ -130,6 +130,68 @@ paths:
         500:
           description: Server Error
 
+  /SearchContacts.php:
+    post:
+      tags:
+      - Contacts
+      summary: Searches database for a contact that matches the search
+      operationId: doSearchContacts
+      description: Searches database for a contact that matches the search
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: searchContactsItem
+        description: search contacts
+        schema:
+          $ref: '#/definitions/SearchContacts'
+      responses:
+        200:
+          description: Found contacts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The information of the person searched for
+                    example: ''
+        400:
+          description: Invalid Input (username or password does not match)
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error (Could not Login right now)
+
+  /UpdateContact.php:
+    post:
+      tags:
+      - Contacts
+      summary: Updates a contact that already exists in the Contacts table
+      operationId: doUpdateContact
+      description: Updates a contact that already exists in the Contacts table
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: updateContactItem
+        description: updateContact
+        schema:
+          $ref: '#/definitions/UpdateContact'
+      responses:
+        200:
+          description: Successfully added contact
+        400:
+          description: Invalid Input (username or password does not match)
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error (Could not Login right now)
 
 
 
@@ -193,6 +255,53 @@ definitions:
       id:
         type: string
         example: "2"
+
+  SearchContacts:
+    type: object
+    required:
+    - startIndex
+    - endIndex
+    - userId
+    - fullName
+    properties:
+      startIndex:
+        type: string
+        example: "1"
+      endIndex:
+        type: string
+        example: "10"
+      userId:
+        type: string
+        example: "3"
+      fullName:
+        type: string
+        example: "Rick L"
+
+  updateContact:
+    type: object
+    required:
+    - firstName
+    - lastName
+    - contactId
+    - phoneNumber
+    - email
+    properties:
+      firstName:
+        type: string
+        example: "Rick"
+      lastName:
+        type: string
+        example: "L"
+      contactId:
+        type: string
+        example: "1"
+      phoneNumber:
+        type: string
+        example: "111-111-1111"
+      email:
+        type: string
+        example: "RickL@test.com"
+
 
 
 
