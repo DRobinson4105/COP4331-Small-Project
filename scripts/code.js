@@ -269,6 +269,9 @@ function searchContact()
                     var phoneNum = document.createElement('td');
                     var edit = document.createElement('td');
 
+                    email.oninput = function(){validateEmail(this)};
+                    phoneNum.oninput = function(){validatePhone(this)};
+
 		            edit.style.width = "140px";
 		            edit.style.display = "flex";
                     edit.style.justifyContent = "space-evenly";
@@ -284,7 +287,6 @@ function searchContact()
                     editIcon.style = "width: 14%; height: 14%";
                     edit.appendChild(editIcon);
                     edit.onclick = function(){editRow(this.parentElement)};
-                    
                     
                     firstName.appendChild(firstNameText);
                     lastName.appendChild(lastNameText);
@@ -474,5 +476,44 @@ function updateContact(curRow)
     catch(err)
     {
         console.log("Error: Could not add contact");
+    }
+}
+
+function validateEmail(email) {
+    console.log(email.textContent);
+    const regex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$/;
+    if(!regex.test(email.textContent)) {
+        if(email.children.length == 0) {
+            const errorIcon = document.createElement("img");
+            errorIcon.src = "images/error.png";
+            errorIcon.style = "width: 10%; height: 10%";
+            errorIcon.paddingRight = "10px";
+
+            email.insertBefore(errorIcon, email.firstChild);
+        }
+    }
+    else {
+        if(email.children.length == 1) {
+            email.removeChild(email.firstChild);
+        }
+    }
+}
+
+function validatePhone(phone) {
+    const regex = /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+    if(!regex.test(phone.textContent)) {
+        if(phone.children.length == 0) {
+            const errorIcon = document.createElement("img");
+            errorIcon.src = "images/error.png";
+            errorIcon.style = "width: 10%; height: 10%";
+            errorIcon.paddingRight = "10px";
+
+            phone.insertBefore(errorIcon, phone.firstChild);
+        }
+    }
+    else {
+        if(phone.children.length == 1) {
+            phone.removeChild(phone.firstChild);
+        }
     }
 }
