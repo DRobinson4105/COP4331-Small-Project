@@ -60,15 +60,6 @@ paths:
       responses:
         200:
           description: Login Successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The ID of the user who logged info
-                    example: '1'
         400:
           description: Invalid Input (username or password does not match)
         404:
@@ -110,7 +101,7 @@ paths:
       summary: Deletes a contact the user holds
       operationId: doDeleteContact
       description: Deletes a contact the user holds
-     consumes:
+      consumes:
       - application/json
       produces:
       - application/json
@@ -150,15 +141,6 @@ paths:
       responses:
         200:
           description: Found contacts
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The information of the person searched for
-                    example: ''
         400:
           description: Invalid Input (username or password does not match)
         404:
@@ -204,7 +186,7 @@ definitions:
     properties:
       login:
         type: string
-        example: "RickL"
+        example: "RickL1"
       password:
         type: string
         example: "password"
@@ -217,7 +199,7 @@ definitions:
     properties:
       login:
         type: string
-        example: "RickL"
+        example: "RickL1"
       password:
         type: string
         example: "password"
@@ -264,20 +246,20 @@ definitions:
     - userId
     - fullName
     properties:
-      startIndex:
-        type: string
-        example: "1"
-      endIndex:
-        type: string
-        example: "10"
-      userId:
-        type: string
-        example: "3"
       fullName:
         type: string
-        example: "Rick L"
+        example: "Da"
+      userId:
+        type: integer
+        example: 7
+      startIndex:
+        type: integer
+        example: 0
+      endIndex:
+        type: integer
+        example: 20
 
-  updateContact:
+  UpdateContact:
     type: object
     required:
     - firstName
@@ -292,7 +274,7 @@ definitions:
       lastName:
         type: string
         example: "L"
-      contactId:
+      contactID:
         type: string
         example: "1"
       phoneNumber:
@@ -301,10 +283,6 @@ definitions:
       email:
         type: string
         example: "RickL@test.com"
-
-
-
-
 
 host: glasses8p.online
 basePath: /api
