@@ -12,7 +12,7 @@
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
 
-	if ($userId < 0){
+	if ($userId < 1){
 		returnWithError("User Id is not valid.", 400);
 	}
 
