@@ -46,8 +46,8 @@
                         "email" => $row["Email"],
                     );
                     $contacts[] = $contact;
-                    returnWithInfo(json_encode($contacts));
                 }
+              returnWithInfo(json_encode($contacts));
 		    }
 		$stmt->close();
 		$conn->close();
