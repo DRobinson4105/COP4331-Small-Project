@@ -269,6 +269,16 @@ function searchContact()
                     var phoneNum = document.createElement('td');
                     var edit = document.createElement('td');
 
+                    var firstNameDiv = document.createElement('div');
+                    var lastNameDiv = document.createElement("div");
+                    var emailDiv = document.createElement('div');
+                    var phoneNumDiv = document.createElement("div");
+
+                    firstNameDiv.style.overflow = "auto";
+                    lastNameDiv.style.overflow = "auto";
+                    emailDiv.style.overflow = "auto";
+                    phoneNumDiv.style.overflow = "auto";
+
                     email.oninput = function(){validateEmail(this)};
                     phoneNum.oninput = function(){validatePhone(this)};
 
@@ -287,11 +297,16 @@ function searchContact()
                     editIcon.style = "width: 14%; height: 14%";
                     edit.appendChild(editIcon);
                     edit.onclick = function(){editRow(this.parentElement)};
+
+                    firstName.appendChild(firstNameDiv);
+                    lastName.appendChild(lastNameDiv);
+                    email.appendChild(emailDiv);
+                    phoneNum.appendChild(phoneNumDiv);
                     
-                    firstName.appendChild(firstNameText);
-                    lastName.appendChild(lastNameText);
-                    email.appendChild(emailText);
-                    phoneNum.appendChild(phoneNumText);
+                    firstNameDiv.appendChild(firstNameText);
+                    lastNameDiv.appendChild(lastNameText);
+                    emailDiv.appendChild(emailText);
+                    phoneNumDiv.appendChild(phoneNumText);
 
                     tr.appendChild(firstName);
                     tr.appendChild(lastName);
@@ -346,10 +361,22 @@ function newRow() {
             newCell.appendChild(discard);
         }
         else {
+            let newDiv = document.createElement("div")
             let newText = document.createTextNode("");
-            newCell.appendChild(newText);
+
+            newDiv.style.overflow = "auto";
+
+            newCell.appendChild(newDiv);
+            newDiv.appendChild(newText);
             newCell.contentEditable = true;
             newCell.style.backgroundColor = "#D0BFB4";
+
+            if(i == 2) {
+                newCell.oninput = function(){validateEmail(this)};
+            }
+            if(i == 3) {
+                newCell.oninput = function(){validatePhone(this)};
+            }
         }
     }
 }
@@ -480,10 +507,9 @@ function updateContact(curRow)
 }
 
 function validateEmail(email) {
-    console.log(email.textContent);
     const regex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$/;
-    if(!regex.test(email.textContent)) {
-        if(email.children.length == 0) {
+    if(!regex.test(email.children[email.children.length - 1].textContent)) {
+        if(email.children.length == 1) {
             const errorIcon = document.createElement("img");
             errorIcon.src = "images/error.png";
             errorIcon.style = "width: 10%; height: 10%";
@@ -493,16 +519,16 @@ function validateEmail(email) {
         }
     }
     else {
-        if(email.children.length == 1) {
+        if(email.children.length > 1) {
             email.removeChild(email.firstChild);
         }
     }
 }
 
 function validatePhone(phone) {
-    const regex = /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
-    if(!regex.test(phone.textContent)) {
-        if(phone.children.length == 0) {
+    const regex = /^\d{3}-\d{3}-\d{4}$/;
+    if(!regex.test(phone.children[phone.children.length - 1].textContent)) {
+        if(phone.children.length == 1) {
             const errorIcon = document.createElement("img");
             errorIcon.src = "images/error.png";
             errorIcon.style = "width: 10%; height: 10%";
@@ -512,7 +538,7 @@ function validatePhone(phone) {
         }
     }
     else {
-        if(phone.children.length == 1) {
+        if(phone.children.length > 1) {
             phone.removeChild(phone.firstChild);
         }
     }
