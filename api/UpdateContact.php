@@ -11,12 +11,12 @@
 	$lastName = $inData["lastName"];
 	$phoneNum = $inData["phoneNumber"];
 	$email = $inData["email"];
-  $fullName = $firstName.' '.$lastName;
+	$fullName = $firstName.' '.$lastName;
 
-  if(firstName == "" && lastName == ""){
-    returnWithError("First name andd last name cannot be empty", 400);
-    return;
-  }
+	if($firstName == "" && $lastName == ""){
+		returnWithError("First name andd last name cannot be empty", 400);
+		return;
+	}
 
 	$conn = new mysqli("localhost", "User", "COP4331OMg", "COP4331");
 	
