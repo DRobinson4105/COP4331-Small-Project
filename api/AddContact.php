@@ -15,42 +15,45 @@
 	if ($userId < 1){
 		returnWithError("User Id is not valid.", 400);
 	}
-
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		returnWithError("Email is not valid.", 400);
-		return;
-	}
-  
-  if($fName == "" && $lName == ""){
-    returnWithError("First name and last name cannot be empty", 400);
-      return;
-  }
-
-	$fullName = $fName.' '.$lName;
+    else{
 	
-	$database_username = "User";
-	$database_password = "COP4331OMg";
-	$database_name = "COP4331";
 
-	$conn = new mysqli("localhost", $database_username, $database_password, $database_name);
-	
-	if ($conn->connect_error) {
-		returnWithError($conn->connect_error, 500);
-	} else {
-		//Parameters maybe different as we need a name, phone number, email
-		$stmt = $conn->prepare("INSERT into Contacts (UserId,FullName,FirstName,LastName,Phone,Email) VALUES(?,?,?,?,?,?)");
-		$stmt->bind_param("ssssss", $userId, $fullName, $fName, $lName, $phoneNum, $email);
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            returnWithError("Email is not valid.", 400);
+            return;
+        }
+    
+        if($fName == "" && $lName == ""){
+            returnWithError("First name and last name cannot be empty", 400);
+            return;
+        }
 
-		if ($stmt->execute()) {
-			$id = $conn->insert_id;
-			returnWithInfo($id);
-		} else {
-			returnWithError("Contact could not be added at this time", 500);
-		}
-		
-		$stmt->close();
-		$conn->close();
-	}
+        $fullName = $fName.' '.$lName;
+        
+        $database_username = "User";
+        $database_password = "COP4331OMg";
+        $database_name = "COP4331";
+
+        $conn = new mysqli("localhost", $database_username, $database_password, $database_name);
+        
+        if ($conn->connect_error) {
+            returnWithError($conn->connect_error, 500);
+        } else {
+            //Parameters maybe different as we need a name, phone number, email
+            $stmt = $conn->prepare("INSERT into Contacts (UserId,FullName,FirstName,LastName,Phone,Email) VALUES(?,?,?,?,?,?)");
+            $stmt->bind_param("ssssss", $userId, $fullName, $fName, $lName, $phoneNum, $email);
+
+            if ($stmt->execute()) {
+                $id = $conn->insert_id;
+                returnWithInfo($id);
+            } else {
+                returnWithError("Contact could not be added at this time", 500);
+            }
+            
+            $stmt->close();
+            $conn->close();
+        }
+    }
 
 	function getRequestInfo() {
 		return json_decode(file_get_contents('php://input'), true);
