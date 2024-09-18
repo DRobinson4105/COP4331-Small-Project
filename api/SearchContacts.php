@@ -27,22 +27,26 @@
         $stmt = $conn->prepare("select * from Contacts where UserID=? and FullName like ? LIMIT ? OFFSET ?");
 		$contactFullName = "%" . $inData["fullName"] . "%";
 		$stmt->bind_param("ssss", $inData["userId"], $contactFullName, $limit, $startIndex); 
-		$stmt->execute();
-		
-		$result = $stmt->get_result();
-		
-		$contacts = array();
-		while ($row = $result->fetch_assoc()) {
-			$contact = array(
-				"id" => $row["ID"],
-				"firstName" => $row["FirstName"],
-				"lastName" => $row["LastName"],
-				"phone" => $row["Phone"],
-				"email" => $row["Email"],
-			);
-			$contacts[] = $contact;
-		}
-
+			if ($userId < 1){
+				returnWithError("User Id is not valid.", 400);
+			}
+		    else{
+                $stmt->execute();
+                
+                $result = $stmt->get_result();
+                
+                $contacts = array();
+                while ($row = $result->fetch_assoc()) {
+                    $contact = array(
+                        "id" => $row["ID"],
+                        "firstName" => $row["FirstName"],
+                        "lastName" => $row["LastName"],
+                        "phone" => $row["Phone"],
+                        "email" => $row["Email"],
+                    );
+                    $contacts[] = $contact;
+                }
+		    }
 		$stmt->close();
 		$conn->close();
 		
