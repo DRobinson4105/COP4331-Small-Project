@@ -17,6 +17,7 @@
 	$endIndex = $inData["endIndex"];
 
 	$limit = $inData["endIndex"] - $inData["startIndex"];
+    $userId = $inData["userId"];
 
     //Connect to database.
 	$conn = new mysqli("localhost", $database_username, $database_password, $database_name); 
@@ -26,7 +27,7 @@
         //Search through names 
         $stmt = $conn->prepare("select * from Contacts where UserID=? and FullName like ? LIMIT ? OFFSET ?");
 		$contactFullName = "%" . $inData["fullName"] . "%";
-		$stmt->bind_param("ssss", $inData["userId"], $contactFullName, $limit, $startIndex); 
+		$stmt->bind_param("ssss", $userId, $contactFullName, $limit, $startIndex); 
 			if ($userId < 1){
 				returnWithError("User Id is not valid.", 400);
 			}
@@ -45,12 +46,13 @@
                         "email" => $row["Email"],
                     );
                     $contacts[] = $contact;
+                    returnWithInfo(json_encode($contacts));
                 }
 		    }
 		$stmt->close();
 		$conn->close();
 		
-		returnWithInfo(json_encode($contacts));
+		
 	}
 
 	function getRequestInfo() {
