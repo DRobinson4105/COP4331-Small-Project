@@ -5,7 +5,9 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 let startIdx = 0;
-let endIdx = 10;
+let endIdx = 11;
+let lastSearch = "";
+let loadMore = false;
 
 function doLogin()
 {
@@ -233,10 +235,12 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
-function searchContact()
+function searchContact(srch)
 {
-    let srch = document.getElementById("searchText").value;
-    document.getElementById("contactSearchResult").innerHTML = "";
+    if(srch == null) {
+        srch = document.getElementById("searchText").value;
+        lastSearch = srch;
+    }
 
     let contactList = "";
 
@@ -255,9 +259,25 @@ function searchContact()
             if (this.readyState == 4 && this.status == 200) 
             {
                 let jsonObject = JSON.parse( xhr.responseText );
-                let table = document.createElement('table');
-                table.style.backgroundColor = "#000000";
-                table.id = "contactTable";
+                let table;
+
+                if(startIdx == 0) {
+                    document.getElementById("contactSearchResult").innerHTML = "";
+                    table = document.createElement('table');
+                    table.style.backgroundColor = "#000000";
+                    table.id = "contactTable";
+                }
+                else {
+                    table = document.getElementById("contactSearchResult").firstChild;
+                }
+
+                if(jsonObject.results[0].length == endIdx - startIdx) {
+                    loadMore = true;
+                }
+                else {
+                    loadMore = false;
+                }
+
                 for( let i=0; i<jsonObject.results[0].length; i++ )
                 {
                     var tr = document.createElement('tr');
@@ -318,6 +338,8 @@ function searchContact()
                 }
 
                 document.getElementById("contactSearchResult").appendChild(table);
+
+                lazyLoad();
             }
         };
         xhr.send(jsonPayload);
@@ -540,6 +562,16 @@ function validatePhone(phone) {
     else {
         if(phone.children.length > 1) {
             phone.removeChild(phone.firstChild);
+        }
+    }
+}
+
+function lazyLoad() {
+    if(loadMore) {
+        if(document.body.scrollHeight - 300 <= (window.scrollY + window.innerHeight)) {
+            startIdx = endIdx - 1;
+            endIdx += 10;
+            searchContact(lastSearch);
         }
     }
 }
