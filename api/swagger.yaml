@@ -60,10 +60,6 @@ paths:
       responses:
         200:
           description: Login Successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/LoginReturn'
         400:
           description: Invalid Input (username or password does not match)
         404:
@@ -144,11 +140,7 @@ paths:
           $ref: '#/definitions/SearchContacts'
       responses:
         200:
-          description: Found contacts
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/SearchReturn'
+          description: Successfully searched for contacts
         400:
           description: Invalid Input (username or password does not match)
         404:
@@ -182,8 +174,6 @@ paths:
           description: URL Not Found
         500:
           description: Server Error (Could not Login right now)
-
-
 
 definitions:
   SignUp:
@@ -291,37 +281,6 @@ definitions:
       email:
         type: string
         example: "RickL@test.com"
-
-    SearchReturn:
-      type: array
-      items:
-        $ref = '#/definitions/SearchModel'
-
-    SeachModel:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The contactID
-        firstName:
-          type: string
-          description: First name of the contact
-        lastName:
-          type: string
-          description: Last name of the contact
-        phone:
-          type: string
-          description: Phone number of the contact
-        email:
-          type: string
-          description: Email of the contact
-
-      LoginReturn:
-        type: object
-        properties:
-          id:
-            type: integer
-            description: userId
 
 host: glasses8p.online
 basePath: /api
