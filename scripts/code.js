@@ -453,33 +453,51 @@ function addContact(newRow) {
     }
 }
 
-function editRow(currRow)
-{
-
-    let table = document.getElementById("contactTable");
-    for (i = 0; i < 5; i++)
-    {
-        if (i == 4)
-        {
+function editRow(currRow) {
+    for (let i = 0; i < 5; i++) {
+        if (i === 4) {
             currRow.children[4].innerHTML = "";
 
             const apply = document.createElement("img");
             apply.src = "images/confirm.png";
             apply.style = "width: 23%; height: 23%";
-            apply.onclick = function(){updateContact(currRow)};
+            apply.onclick = function(){ updateContact(currRow); };
             currRow.children[4].appendChild(apply);
 
             const discard = document.createElement("img");
             discard.src = "images/discard.png";
             discard.style = "width: 18%; height: 18%";
+            discard.onclick = function(){ deleteContact(currRow); };
             currRow.children[4].appendChild(discard);
-        }
-
-        else 
-        {
+        } else {
             currRow.children[i].contentEditable = true;
             currRow.children[i].style.backgroundColor = "#D0BFB4";
         }
+    }
+}
+
+function deleteContact(currRow) {
+    let contactID = currRow.id;
+
+    let tmp = { id: contactID };
+    let jsonPayload = JSON.stringify(tmp);
+
+    let url = urlBase + '/DeleteContact.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try {
+        xhr.send(jsonPayload);
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                currRow.remove();  
+            }
+        };
+        
+    } catch (err) {
+        console.log("Error: Could not delete contact", err);
     }
 }
 
