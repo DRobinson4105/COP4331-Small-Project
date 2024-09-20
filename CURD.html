@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
-    <head>
+<html lang="en"> 
+<head>
+    <title>Contact Management</title>
         <link rel="stylesheet" href="css/style.css">
         <link href='https://fonts.googleapis.com/css?family=Judson' rel='stylesheet'>
         <script src="scripts/code.js"></script>
@@ -14,12 +15,12 @@
     <body onload="searchContact()" onscroll="lazyLoad()">
 	    <div class="center" style="width: 1100px; margin-top: 50px; display: flex; justify-content: space-between;">
             <form action="https://github.com/DRobinson4105/COP4331-Small-Project">
-                <button type="submit" style="width: 43px; height: 43px"><img src="images/logo-white.png" style="width: 100%; height: 100%; padding-top: 5%; padding-bottom: 5%;"></button>
+                <button type="submit" style="width: 43px; height: 43px"><img src="images/logo-white.png" alt="LogoImage" style="width: 100%; height: 100%; padding-top: 5%; padding-bottom: 5%;"></button>
             </form>
             <input id="searchText" type="text" placeholder="Search..." style="width: 750px">
-            <button type="button" style="width: 43px; height: 43px" onclick="searchContact();"><img src="images/SearchIcon.png" style="width: 80%; height: 75%; padding-top: 10%; " alt=""></button> 
-            <button type="submit" style="width: 43px; height: 43px" onclick="newRow();"><img src="images/AddContact.png" style="width: 90%; height: 90%; padding-top: 5%; padding-left: 5%;"></button> 
-            <button type="submit" onclick="doLogout();">Logout</button>
+            <button name="SearchContact" type="button" style="width: 43px; height: 43px" onclick="searchContact();"><img src="images/SearchIcon.png" alt="SearchIcon" style="width: 80%; height: 75%; padding-top: 10%; " alt=""></button> 
+            <button name="AddContact" type="submit" style="width: 43px; height: 43px" onclick="newRow();"><img src="images/AddContact.png" alt="AddContactButton" style="width: 90%; height: 90%; padding-top: 5%; padding-left: 5%;"></button> 
+            <button name="LogOut" type="submit" onclick="doLogout();">Logout</button>
         </div><br>
         <table>
             <tr style="background-color: #486B79;">
@@ -27,7 +28,7 @@
                 <td style="color: #F2E5E5;">Last Name</td>
                 <td style="color: #F2E5E5;">Email</td>
                 <td style="color: #F2E5E5;">Phone</td>
-                <td style="width: 140px; color: #F2E5E5;">Edit</td> 
+                <td style="width: 140px; color: #F2E5E5;" aria-label="Edit Contact">Edit</td> 
             </tr>
         </table><br>
         <div id="contactSearchResult"></div>
