@@ -240,6 +240,8 @@ function searchContact(srch)
     if(srch == null) {
         srch = document.getElementById("searchText").value;
         lastSearch = srch;
+        startIdx = 0;
+        endIdx = 11;
     }
 
     let contactList = "";
