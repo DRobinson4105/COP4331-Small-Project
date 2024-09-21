@@ -389,10 +389,10 @@ function newRow() {
             let newText = document.createTextNode("");
 
             newDiv.style.overflow = "auto";
+	    newDiv.contentEditable = true;
 
             newCell.appendChild(newDiv);
             newDiv.appendChild(newText);
-            newCell.contentEditable = true;
             newCell.style.backgroundColor = "#D0BFB4";
 
             if(i == 2) {
@@ -411,6 +411,10 @@ function addContact(newRow) {
     let email = newRow.children[2].innerText;
     let phone = newRow.children[3].innerText;
     
+    if(newRow.children[2].children.length > 1 || newRow.children[3].children.length > 1) {
+        return;
+    }
+
     let tmp = {firstName:firstName,lastName:lastName,userId:userId,phoneNumber:phone,email:email};
 	let jsonPayload = JSON.stringify( tmp );
 
@@ -433,7 +437,7 @@ function addContact(newRow) {
                 
                 // Visual feedback to user
                 for(let i = 0; i < 5; i++) {
-                    newRow.children[i].contentEditable = false;
+                    newRow.children[i].firstChild.contentEditable = false;
                     newRow.children[i].style.backgroundColor = "#F6F5EF";
                 }
                 
@@ -470,7 +474,7 @@ function editRow(currRow) {
             discard.onclick = function(){ deleteContact(currRow); };
             currRow.children[4].appendChild(discard);
         } else {
-            currRow.children[i].contentEditable = true;
+            currRow.children[i].firstChild.contentEditable = true;
             currRow.children[i].style.backgroundColor = "#D0BFB4";
         }
     }
@@ -509,6 +513,10 @@ function updateContact(curRow)
     let phone = curRow.children[3].innerText;
     let contactID = curRow.id;
     
+    if(curRow.children[2].children.length > 1 || curRow.children[3].children.length > 1) {
+        return;
+    }
+
     let tmp = {firstName:firstName,lastName:lastName,contactID:contactID,phoneNumber:phone,email:email};
 	let jsonPayload = JSON.stringify( tmp );
 
@@ -528,7 +536,7 @@ function updateContact(curRow)
             {
                 // Visual feedback to user
                 for(let i = 0; i < 5; i++) {
-                    curRow.children[i].contentEditable = false;
+                    curRow.children[i].firstChild.contentEditable = false;
                     curRow.children[i].style.backgroundColor = "#F6F5EF";
                 }
                 
