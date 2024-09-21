@@ -301,6 +301,11 @@ function searchContact(srch)
                     emailDiv.style.overflow = "auto";
                     phoneNumDiv.style.overflow = "auto";
 
+		    emailDiv.style.display = "inline-block";
+                    emailDiv.style.minWidth = "80%";
+                    phoneNumDiv.style.display = "inline-block";
+                    phoneNumDiv.style.minWidth = "80%";
+
                     email.oninput = function(){validateEmail(this)};
                     phoneNum.oninput = function(){validatePhone(this)};
 
@@ -397,9 +402,13 @@ function newRow() {
 
             if(i == 2) {
                 newCell.oninput = function(){validateEmail(this)};
+		newDiv.style.display = "inline-block";
+                newDiv.style.minWidth = "80%";
             }
             if(i == 3) {
                 newCell.oninput = function(){validatePhone(this)};
+		newDiv.style.display = "inline-block";
+                newDiv.style.minWidth = "80%";
             }
         }
     }
@@ -562,8 +571,7 @@ function validateEmail(email) {
         if(email.children.length == 1) {
             const errorIcon = document.createElement("img");
             errorIcon.src = "images/error.png";
-            errorIcon.style = "width: 10%; height: 10%";
-            errorIcon.paddingRight = "10px";
+            errorIcon.style = "width: 10%; height: 10%; padding-right: 10px;";
 
             email.insertBefore(errorIcon, email.firstChild);
         }
@@ -581,8 +589,7 @@ function validatePhone(phone) {
         if(phone.children.length == 1) {
             const errorIcon = document.createElement("img");
             errorIcon.src = "images/error.png";
-            errorIcon.style = "width: 10%; height: 10%";
-            errorIcon.paddingRight = "10px";
+            errorIcon.style = "width: 10%; height: 10%; padding-right: 10px";
 
             phone.insertBefore(errorIcon, phone.firstChild);
         }
