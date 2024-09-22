@@ -301,10 +301,14 @@ function searchContact(srch)
                     emailDiv.style.overflow = "auto";
                     phoneNumDiv.style.overflow = "auto";
 
+		    emailDiv.style.verticalAlign = "top";
 		    emailDiv.style.display = "inline-block";
                     emailDiv.style.minWidth = "80%";
+                    emailDiv.style.maxWidth = "100%";
+                    phoneNumDiv.style.verticalAlign = "top";
                     phoneNumDiv.style.display = "inline-block";
                     phoneNumDiv.style.minWidth = "80%";
+                    phoneNumDiv.style.maxWidth = "100%";
 
                     email.oninput = function(){validateEmail(this)};
                     phoneNum.oninput = function(){validatePhone(this)};
@@ -402,13 +406,17 @@ function newRow() {
 
             if(i == 2) {
                 newCell.oninput = function(){validateEmail(this)};
-		newDiv.style.display = "inline-block";
+                newDiv.style.verticalAlign = "top";
+		        newDiv.style.display = "inline-block";
                 newDiv.style.minWidth = "80%";
+                newDiv.style.maxWidth = "100%";
             }
             if(i == 3) {
                 newCell.oninput = function(){validatePhone(this)};
-		newDiv.style.display = "inline-block";
+                newDiv.style.verticalAlign = "top";
+		        newDiv.style.display = "inline-block";
                 newDiv.style.minWidth = "80%";
+                newDiv.style.maxWidth = "100%";
             }
         }
     }
@@ -566,19 +574,21 @@ function updateContact(curRow)
 }
 
 function validateEmail(email) {
-    const regex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$/;
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if(!regex.test(email.children[email.children.length - 1].textContent)) {
         if(email.children.length == 1) {
             const errorIcon = document.createElement("img");
             errorIcon.src = "images/error.png";
             errorIcon.style = "width: 10%; height: 10%; padding-right: 10px;";
 
+            email.firstChild.style.maxWidth = "80%";
             email.insertBefore(errorIcon, email.firstChild);
         }
     }
     else {
         if(email.children.length > 1) {
             email.removeChild(email.firstChild);
+            email.firstChild.style.maxWidth = "100%";
         }
     }
 }
@@ -591,12 +601,14 @@ function validatePhone(phone) {
             errorIcon.src = "images/error.png";
             errorIcon.style = "width: 10%; height: 10%; padding-right: 10px";
 
+            phone.firstChild.style.maxWidth = "80%";
             phone.insertBefore(errorIcon, phone.firstChild);
         }
     }
     else {
         if(phone.children.length > 1) {
             phone.removeChild(phone.firstChild);
+            phone.firstChild.style.maxWidth = "100%";
         }
     }
 }
