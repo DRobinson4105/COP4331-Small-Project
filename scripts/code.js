@@ -498,6 +498,10 @@ function editRow(currRow) {
 }
 
 function deleteContact(currRow) {
+    if (!confirm("Are you sure you want to delete this contact?")) {
+        return; 
+    }
+    
     let contactID = currRow.id;
 
     let tmp = { id: contactID };
