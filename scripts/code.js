@@ -2,8 +2,6 @@ const urlBase = 'http://glasses8p.online/api';
 const extension = 'php';
 
 let userId = 0;
-let firstName = "";
-let lastName = "";
 let startIdx = 0;
 let endIdx = 11;
 let lastSearch = "";
@@ -12,8 +10,6 @@ let loadMore = false;
 function doLogin()
 {
     userId = 0;
-    firstName = "";
-    lastName = "";
     
     let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
@@ -52,9 +48,6 @@ function doLogin()
                     document.getElementById("loginResult").appendChild(errorMessage);
                     return;
                 }
-        
-                firstName = jsonObject.firstName;
-                lastName = jsonObject.lastName;
 
                 saveCookie();
     
@@ -100,8 +93,6 @@ function doLogin()
 function doSignUp()
 {
     userId = 0;
-    firstName = "";
-    lastName = "";
     
     let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
@@ -140,9 +131,6 @@ function doSignUp()
                     document.getElementById("loginResult").appendChild(errorMessage);
                     return;
                 }
-        
-                firstName = jsonObject.firstName;
-                lastName = jsonObject.lastName;
 
                 saveCookie();
     
@@ -190,7 +178,7 @@ function saveCookie()
 	let minutes = 20;
 	let date = new Date();
 	date.setTime(date.getTime()+(minutes*60*1000));	
-	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
+	document.cookie = "userId=" + userId + ";expires=" + date.toGMTString();
 }
 
 function readCookie()
@@ -202,15 +190,7 @@ function readCookie()
 	{
 		let thisOne = splits[i].trim();
 		let tokens = thisOne.split("=");
-		if( tokens[0] == "firstName" )
-		{
-			firstName = tokens[1];
-		}
-		else if( tokens[0] == "lastName" )
-		{
-			lastName = tokens[1];
-		}
-		else if( tokens[0] == "userId" )
+		if( tokens[0] == "userId" )
 		{
 			userId = parseInt( tokens[1].trim() );
 		}
@@ -220,18 +200,12 @@ function readCookie()
 	{
 		window.location.href = "index.html";
 	}
-	else
-	{
-//		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
-	}
 }
 
 function doLogout()
 {
 	userId = 0;
-	firstName = "";
-	lastName = "";
-	document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	document.cookie = "userId= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 	window.location.href = "index.html";
 }
 
@@ -261,16 +235,13 @@ function searchContact(srch)
             if (this.readyState == 4 && this.status == 200) 
             {
                 let jsonObject = JSON.parse( xhr.responseText );
-                let table;
+                let table = document.getElementById("contactTable");;
 
-                if(startIdx == 0) {
+                if(table == null) {
                     document.getElementById("contactSearchResult").innerHTML = "";
                     table = document.createElement('table');
                     table.style.backgroundColor = "#000000";
                     table.id = "contactTable";
-                }
-                else {
-                    table = document.getElementById("contactSearchResult").firstChild;
                 }
 
                 if(jsonObject.results[0].length == endIdx - startIdx) {
@@ -351,6 +322,9 @@ function searchContact(srch)
                 document.getElementById("contactSearchResult").appendChild(table);
 
                 lazyLoad();
+            }
+            else if(this.status != 200) {
+                document.getElementById("contactSearchResult").innerHTML = "Error: Could not load contacts";
             }
         };
         xhr.send(jsonPayload);
@@ -465,12 +439,52 @@ function addContact(newRow) {
                 edit.style = "width: 14%; height: 14%"
                 edit.onclick = function(){editRow(newRow)};
                 newRow.children[4].appendChild(edit);
+
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+            else if(this.status != 200) {
+                let result = document.getElementById("contactSearchResult");
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.innerText = "Error: Could not add contact";
+                }
+                else {
+                    errorMsg = document.createElement("span");
+                    errorMsg.id = "errorMsg";
+                    errorMsg.innerText = "Error: Could not add contact";
+                    errorMsg.className = "center";
+                }
+                if(result.firstChild) {
+                    result.insertBefore(errorMsg, result.firstChild);
+                }
+                else {
+                    result.appendChild(errorMsg);
+                }
             }
         }
     }
     catch(err)
     {
-        console.log("Error: Could not add contact");
+        let result = document.getElementById("contactSearchResult");
+        let errorMsg = document.getElementById("errorMsg");
+        if(errorMsg) {
+            errorMsg.innerText = "Error: Could not add contact";
+        }
+        else {
+            errorMsg = document.createElement("span");
+            errorMsg.id = "errorMsg";
+            errorMsg.innerText = "Error: Could not add contact";
+            errorMsg.className = "center";
+        }
+        if(result.firstChild) {
+            result.insertBefore(errorMsg, result.firstChild);
+        }
+        else {
+            result.appendChild(errorMsg);
+        }
     }
 }
 
@@ -517,12 +531,51 @@ function deleteContact(currRow) {
         xhr.send(jsonPayload);
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                currRow.remove();  
+                currRow.remove(); 
+                
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+            else if(this.status != 200) {
+                let result = document.getElementById("contactSearchResult");
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.innerText = "Error: Could not delete contact";
+                }
+                else {
+                    errorMsg = document.createElement("span");
+                    errorMsg.id = "errorMsg";
+                    errorMsg.innerText = "Error: Could not delete contact";
+                    errorMsg.className = "center";
+                }
+                if(result.firstChild) {
+                    result.insertBefore(errorMsg, result.firstChild);
+                }
+                else {
+                    result.appendChild(errorMsg);
+                }
             }
         };
-        
     } catch (err) {
-        console.log("Error: Could not delete contact", err);
+        let result = document.getElementById("contactSearchResult");
+        let errorMsg = document.getElementById("errorMsg");
+        if(errorMsg) {
+            errorMsg.innerText = "Error: Could not delete contact";
+        }
+        else {
+            errorMsg = document.createElement("span");
+            errorMsg.id = "errorMsg";
+            errorMsg.innerText = "Error: Could not delete contact";
+            errorMsg.className = "center";
+        }
+        if(result.firstChild) {
+            result.insertBefore(errorMsg, result.firstChild);
+        }
+        else {
+            result.appendChild(errorMsg);
+        }
     }
 }
 
@@ -568,12 +621,52 @@ function updateContact(curRow)
                 edit.style = "width: 14%; height: 14%"
                 edit.onclick = function(){editRow(curRow)};
                 curRow.children[4].appendChild(edit);
+
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+            else if(this.status != 200) {
+                let result = document.getElementById("contactSearchResult");
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.innerText = "Error: Could not update contact";
+                }
+                else {
+                    errorMsg = document.createElement("span");
+                    errorMsg.id = "errorMsg";
+                    errorMsg.innerText = "Error: Could not update contact";
+                    errorMsg.className = "center";
+                }
+                if(result.firstChild) {
+                    result.insertBefore(errorMsg, result.firstChild);
+                }
+                else {
+                    result.appendChild(errorMsg);
+                }
             }
         }
     }
     catch(err)
     {
-        console.log("Error: Could not add contact");
+        let result = document.getElementById("contactSearchResult");
+        let errorMsg = document.getElementById("errorMsg");
+        if(errorMsg) {
+            errorMsg.innerText = "Error: Could not update contact";
+        }
+        else {
+            errorMsg = document.createElement("span");
+            errorMsg.id = "errorMsg";
+            errorMsg.innerText = "Error: Could not update contact";
+            errorMsg.className = "center";
+        }
+        if(result.firstChild) {
+            result.insertBefore(errorMsg, result.firstChild);
+        }
+        else {
+            result.appendChild(errorMsg);
+        }
     }
 }
 
@@ -626,3 +719,7 @@ function lazyLoad() {
         }
     }
 }
+
+
+
+
