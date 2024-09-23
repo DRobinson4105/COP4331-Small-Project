@@ -280,7 +280,7 @@ function searchContact(srch)
                     loadMore = false;
                 }
 
-                for( let i=0; i<jsonObject.results[0].length; i++ )
+                for( let i=0; i<jsonObject.results[0].length - 1; i++ )
                 {
                     var tr = document.createElement('tr');
                     tr.id = jsonObject["results"][0][i]["id"];
@@ -301,8 +301,8 @@ function searchContact(srch)
                     emailDiv.style.overflow = "auto";
                     phoneNumDiv.style.overflow = "auto";
 
-		    emailDiv.style.verticalAlign = "top";
-		    emailDiv.style.display = "inline-block";
+		            emailDiv.style.verticalAlign = "top";
+		            emailDiv.style.display = "inline-block";
                     emailDiv.style.minWidth = "80%";
                     emailDiv.style.maxWidth = "100%";
                     phoneNumDiv.style.verticalAlign = "top";
