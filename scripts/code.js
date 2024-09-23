@@ -403,6 +403,31 @@ function addContact(newRow) {
     let phone = newRow.children[3].innerText;
     
     if(newRow.children[2].children.length > 1 || newRow.children[3].children.length > 1) {
+        let result = document.getElementById("contactSearchResult");
+        let errorMsg = document.getElementById("errorMsg");
+        if(!errorMsg) {
+            errorMsg = document.createElement("span");
+            errorMsg.id = "errorMsg";
+            errorMsg.className = "center";
+
+            if(result.firstChild) {
+                result.insertBefore(errorMsg, result.firstChild);
+            }
+            else {
+                result.appendChild(errorMsg);
+            }
+        }
+
+        if(newRow.children[2].children.length > 1 && newRow.children[3].children.length > 1) {
+            errorMsg.innerText = "Error: Email is invalid and Phone Number must be 10 digits (###-###-####)";
+        }
+        else if(newRow.children[2].children.length > 1) {
+            errorMsg.innerText = "Error: Email is invalid";
+        }
+        else {
+            errorMsg.innerText = "Error: Phone Number must be 10 digits (###-###-####)";
+        }
+
         return;
     }
 
@@ -588,6 +613,31 @@ function updateContact(curRow)
     let contactID = curRow.id;
     
     if(curRow.children[2].children.length > 1 || curRow.children[3].children.length > 1) {
+        let result = document.getElementById("contactSearchResult");
+        let errorMsg = document.getElementById("errorMsg");
+        if(!errorMsg) {
+            errorMsg = document.createElement("span");
+            errorMsg.id = "errorMsg";
+            errorMsg.className = "center";
+
+            if(result.firstChild) {
+                result.insertBefore(errorMsg, result.firstChild);
+            }
+            else {
+                result.appendChild(errorMsg);
+            }
+        }
+
+        if(curRow.children[2].children.length > 1 && curRow.children[3].children.length > 1) {
+            errorMsg.innerText = "Error: Email is invalid and Phone Number must be 10 digits (###-###-####)";
+        }
+        else if(curRow.children[2].children.length > 1) {
+            errorMsg.innerText = "Error: Email is invalid";
+        }
+        else {
+            errorMsg.innerText = "Error: Phone Number must be 10 digits (###-###-####)";
+        }
+
         return;
     }
 
