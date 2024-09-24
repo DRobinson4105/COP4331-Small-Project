@@ -13,6 +13,24 @@ function doLogin()
     
     let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
+    
+    if (login.trim() === "" || password.trim() === "") {
+        const errorMessage = document.createElement("div");
+
+        const errorIcon = document.createElement("img");
+        errorIcon.src = "images/error.png";
+        errorIcon.style = "width: 1%; height: 1%";
+
+        const errorText = document.createTextNode("Username and/or password cannot be empty.");
+
+        errorMessage.appendChild(errorIcon);
+        errorMessage.appendChild(errorText);
+
+        document.getElementById("loginResult").innerHTML = "";
+        document.getElementById("loginResult").appendChild(errorMessage);
+        return; 
+    }
+
 
     let tmp = {login:login,password:password};
     let jsonPayload = JSON.stringify( tmp );
@@ -377,7 +395,7 @@ function newRow() {
             let newText = document.createTextNode("");
 
             newDiv.style.overflow = "auto";
-	    newDiv.contentEditable = true;
+	        newDiv.contentEditable = true;
 
             newCell.appendChild(newDiv);
             newDiv.appendChild(newText);
@@ -406,33 +424,22 @@ function addContact(newRow) {
     let lastName = newRow.children[1].innerText;
     let email = newRow.children[2].innerText;
     let phone = newRow.children[3].innerText;
+
+    if(firstName == "" && lastName == "" && email == "" && phone == "") {
+        displayError("Error: Valid contact must have one non-empty value");
+        return;
+    }
     
-    if(newRow.children[2].children.length > 1 || newRow.children[3].children.length > 1) {
-        let result = document.getElementById("contactSearchResult");
-        let errorMsg = document.getElementById("errorMsg");
-        if(!errorMsg) {
-            errorMsg = document.createElement("span");
-            errorMsg.id = "errorMsg";
-            errorMsg.className = "center";
-
-            if(result.firstChild) {
-                result.insertBefore(errorMsg, result.firstChild);
-            }
-            else {
-                result.appendChild(errorMsg);
-            }
-        }
-
-        if(newRow.children[2].children.length > 1 && newRow.children[3].children.length > 1) {
-            errorMsg.innerText = "Error: Email is invalid and Phone Number must be 10 digits (###-###-####)";
-        }
-        else if(newRow.children[2].children.length > 1) {
-            errorMsg.innerText = "Error: Email is invalid";
-        }
-        else {
-            errorMsg.innerText = "Error: Phone Number must be 10 digits (###-###-####)";
-        }
-
+    if(newRow.children[2].children.length > 1 && newRow.children[3].children.length > 1) {
+        displayError("Error: Email is invalid and Phone Number must be 10 digits (###-###-####)");
+        return;
+    }
+    else if(newRow.children[2].children.length > 1) {
+        displayError("Error: Email is invalid");
+        return;
+    }
+    else if(newRow.children[3].children.length > 1){
+        displayError("Error: Phone Number must be 10 digits (###-###-####)");
         return;
     }
 
@@ -476,45 +483,13 @@ function addContact(newRow) {
                 }
             }
             else if(this.status != 200) {
-                let result = document.getElementById("contactSearchResult");
-                let errorMsg = document.getElementById("errorMsg");
-                if(errorMsg) {
-                    errorMsg.innerText = "Error: Could not add contact";
-                }
-                else {
-                    errorMsg = document.createElement("span");
-                    errorMsg.id = "errorMsg";
-                    errorMsg.innerText = "Error: Could not add contact";
-                    errorMsg.className = "center";
-                }
-                if(result.firstChild) {
-                    result.insertBefore(errorMsg, result.firstChild);
-                }
-                else {
-                    result.appendChild(errorMsg);
-                }
+                displayError("Error: Could not add contact");
             }
         }
     }
     catch(err)
     {
-        let result = document.getElementById("contactSearchResult");
-        let errorMsg = document.getElementById("errorMsg");
-        if(errorMsg) {
-            errorMsg.innerText = "Error: Could not add contact";
-        }
-        else {
-            errorMsg = document.createElement("span");
-            errorMsg.id = "errorMsg";
-            errorMsg.innerText = "Error: Could not add contact";
-            errorMsg.className = "center";
-        }
-        if(result.firstChild) {
-            result.insertBefore(errorMsg, result.firstChild);
-        }
-        else {
-            result.appendChild(errorMsg);
-        }
+        displayError("Error: Could not add contact");
     }
 }
 
@@ -569,43 +544,11 @@ function deleteContact(currRow) {
                 }
             }
             else if(this.status != 200) {
-                let result = document.getElementById("contactSearchResult");
-                let errorMsg = document.getElementById("errorMsg");
-                if(errorMsg) {
-                    errorMsg.innerText = "Error: Could not delete contact";
-                }
-                else {
-                    errorMsg = document.createElement("span");
-                    errorMsg.id = "errorMsg";
-                    errorMsg.innerText = "Error: Could not delete contact";
-                    errorMsg.className = "center";
-                }
-                if(result.firstChild) {
-                    result.insertBefore(errorMsg, result.firstChild);
-                }
-                else {
-                    result.appendChild(errorMsg);
-                }
+                displayError("Error: Could not delete contact");
             }
         };
     } catch (err) {
-        let result = document.getElementById("contactSearchResult");
-        let errorMsg = document.getElementById("errorMsg");
-        if(errorMsg) {
-            errorMsg.innerText = "Error: Could not delete contact";
-        }
-        else {
-            errorMsg = document.createElement("span");
-            errorMsg.id = "errorMsg";
-            errorMsg.innerText = "Error: Could not delete contact";
-            errorMsg.className = "center";
-        }
-        if(result.firstChild) {
-            result.insertBefore(errorMsg, result.firstChild);
-        }
-        else {
-            result.appendChild(errorMsg);
-        }
+        displayError("Error: Could not delete contact");
     }
 }
 
@@ -616,34 +559,23 @@ function updateContact(curRow)
     let email = curRow.children[2].innerText;
     let phone = curRow.children[3].innerText;
     let contactID = curRow.id;
-    
-    if(curRow.children[2].children.length > 1 || curRow.children[3].children.length > 1) {
-        let result = document.getElementById("contactSearchResult");
-        let errorMsg = document.getElementById("errorMsg");
-        if(!errorMsg) {
-            errorMsg = document.createElement("span");
-            errorMsg.id = "errorMsg";
-            errorMsg.className = "center";
 
-            if(result.firstChild) {
-                result.insertBefore(errorMsg, result.firstChild);
-            }
-            else {
-                result.appendChild(errorMsg);
-            }
-        }
-
-        if(curRow.children[2].children.length > 1 && curRow.children[3].children.length > 1) {
-            errorMsg.innerText = "Error: Email is invalid and Phone Number must be 10 digits (###-###-####)";
-        }
-        else if(curRow.children[2].children.length > 1) {
-            errorMsg.innerText = "Error: Email is invalid";
-        }
-        else {
-            errorMsg.innerText = "Error: Phone Number must be 10 digits (###-###-####)";
-        }
-
+    if(firstName == "" && lastName == "" && email == "" && phone == "") {
+        displayError("Error: Valid contact must have one non-empty value");
         return;
+    }
+    
+    if(curRow.children[2].children.length > 1 && curRow.children[3].children.length > 1) {
+        displayError("Error: Email is invalid and Phone Number must be 10 digits (###-###-####)");
+	return;
+    }
+    else if(curRow.children[2].children.length > 1) {
+        displayError("Error: Email is invalid");
+	return;
+    }
+    else if(curRow.children[3].children.length > 1){
+        displayError("Error: Phone Number must be 10 digits (###-###-####)");
+	return;
     }
 
     let tmp = {firstName:firstName,lastName:lastName,contactID:contactID,phoneNumber:phone,email:email};
@@ -683,45 +615,13 @@ function updateContact(curRow)
                 }
             }
             else if(this.status != 200) {
-                let result = document.getElementById("contactSearchResult");
-                let errorMsg = document.getElementById("errorMsg");
-                if(errorMsg) {
-                    errorMsg.innerText = "Error: Could not update contact";
-                }
-                else {
-                    errorMsg = document.createElement("span");
-                    errorMsg.id = "errorMsg";
-                    errorMsg.innerText = "Error: Could not update contact";
-                    errorMsg.className = "center";
-                }
-                if(result.firstChild) {
-                    result.insertBefore(errorMsg, result.firstChild);
-                }
-                else {
-                    result.appendChild(errorMsg);
-                }
+                displayError("Error: Could not update contact");
             }
         }
     }
     catch(err)
     {
-        let result = document.getElementById("contactSearchResult");
-        let errorMsg = document.getElementById("errorMsg");
-        if(errorMsg) {
-            errorMsg.innerText = "Error: Could not update contact";
-        }
-        else {
-            errorMsg = document.createElement("span");
-            errorMsg.id = "errorMsg";
-            errorMsg.innerText = "Error: Could not update contact";
-            errorMsg.className = "center";
-        }
-        if(result.firstChild) {
-            result.insertBefore(errorMsg, result.firstChild);
-        }
-        else {
-            result.appendChild(errorMsg);
-        }
+        displayError("Error: Could not update contact");
     }
 }
 
@@ -773,6 +673,23 @@ function lazyLoad() {
             searchContact(lastSearch);
         }
     }
+}
+
+function displayError(msg) {
+    let errorDisplay = document.getElementById("errorDisplay");
+    
+    let errorDiv = document.createElement("div");
+    const errorMsg = document.createTextNode(" " + msg);
+
+    const errorIcon = document.createElement("img");
+    errorIcon.src = "images/error.png";
+    errorIcon.style = "width: 1%; height: 1%";
+
+    errorDiv.appendChild(errorIcon);
+    errorDiv.appendChild(errorMsg);
+
+    errorDisplay.innerHTML = "";
+    errorDisplay.appendChild(errorDiv);
 }
 
 
