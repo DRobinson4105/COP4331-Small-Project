@@ -28,10 +28,7 @@
         $stmt = $conn->prepare("select * from Contacts where UserID=? and FullName like ? LIMIT ? OFFSET ?");
 		$contactFullName = "%" . $inData["fullName"] . "%";
 		$stmt->bind_param("ssss", $userId, $contactFullName, $limit, $startIndex); 
-			if ($userId < 1){
-				returnWithError("User Id is not valid.", 400);
-			}
-		    else{
+			
                 $stmt->execute();
                 
                 $result = $stmt->get_result();
@@ -48,7 +45,7 @@
                     $contacts[] = $contact;
                 }
               returnWithInfo(json_encode($contacts));
-		    }
+		    
 		$stmt->close();
 		$conn->close();
 		
