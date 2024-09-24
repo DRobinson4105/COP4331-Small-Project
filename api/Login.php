@@ -23,17 +23,11 @@
 		$stmt = $conn->prepare("SELECT ID FROM Users WHERE Login=? AND Password =?");
 		$stmt->bind_param("ss", $inData["login"], $inData["password"]);
 
-		if ($stmt->execute()) {
-			$result = $stmt->get_result();
-
-			if ($row = $result->fetch_assoc()) {
-				returnWithInfo($row['ID']);
-			} else {
-				returnWithError("Username or password is wrong", 400);
-			}
-		} else {
-			returnWithError("Unable to process the login request at this time. Please try again later.", 500);
-		}
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$row = $result->fetch_assoc();
+		returnWithInfo($row['ID']);
+			
 
 		$stmt->close();
 		$conn->close();

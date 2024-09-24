@@ -2,8 +2,6 @@ const urlBase = 'http://glasses8p.online/api';
 const extension = 'php';
 
 let userId = 0;
-let firstName = "";
-let lastName = "";
 let startIdx = 0;
 let endIdx = 11;
 let lastSearch = "";
@@ -12,11 +10,26 @@ let loadMore = false;
 function doLogin()
 {
     userId = 0;
-    firstName = "";
-    lastName = "";
     
     let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
+    // Makes sure that empty login doesnt work LOL
+    if (login.trim() === "" || password.trim() === "") {
+        const errorMessage = document.createElement("div");
+
+        const errorIcon = document.createElement("img");
+        errorIcon.src = "images/error.png";
+        errorIcon.style = "width: 1%; height: 1%";
+
+        const errorText = document.createTextNode("Username and/or password cannot be empty.");
+
+        errorMessage.appendChild(errorIcon);
+        errorMessage.appendChild(errorText);
+
+        document.getElementById("loginResult").innerHTML = "";
+        document.getElementById("loginResult").appendChild(errorMessage);
+        return; 
+    }
 
     let tmp = {login:login,password:password};
     let jsonPayload = JSON.stringify( tmp );
@@ -52,9 +65,6 @@ function doLogin()
                     document.getElementById("loginResult").appendChild(errorMessage);
                     return;
                 }
-        
-                firstName = jsonObject.firstName;
-                lastName = jsonObject.lastName;
 
                 saveCookie();
     
@@ -100,8 +110,6 @@ function doLogin()
 function doSignUp()
 {
     userId = 0;
-    firstName = "";
-    lastName = "";
     
     let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
@@ -140,9 +148,6 @@ function doSignUp()
                     document.getElementById("loginResult").appendChild(errorMessage);
                     return;
                 }
-        
-                firstName = jsonObject.firstName;
-                lastName = jsonObject.lastName;
 
                 saveCookie();
     
@@ -190,7 +195,7 @@ function saveCookie()
 	let minutes = 20;
 	let date = new Date();
 	date.setTime(date.getTime()+(minutes*60*1000));	
-	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
+	document.cookie = "userId=" + userId + ";expires=" + date.toGMTString();
 }
 
 function readCookie()
@@ -202,15 +207,7 @@ function readCookie()
 	{
 		let thisOne = splits[i].trim();
 		let tokens = thisOne.split("=");
-		if( tokens[0] == "firstName" )
-		{
-			firstName = tokens[1];
-		}
-		else if( tokens[0] == "lastName" )
-		{
-			lastName = tokens[1];
-		}
-		else if( tokens[0] == "userId" )
+		if( tokens[0] == "userId" )
 		{
 			userId = parseInt( tokens[1].trim() );
 		}
@@ -220,33 +217,30 @@ function readCookie()
 	{
 		window.location.href = "index.html";
 	}
-	else
-	{
-//		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
-	}
 }
 
 function doLogout()
 {
 	userId = 0;
-	firstName = "";
-	lastName = "";
-	document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	document.cookie = "userId= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 	window.location.href = "index.html";
 }
 
 function searchContact(srch)
 {
+    let tmp;
     if(srch == null) {
-        srch = document.getElementById("searchText").value;
-        lastSearch = srch;
+        lastSearch = document.getElementById("searchText").value;
         startIdx = 0;
         endIdx = 11;
+        tmp = {fullName:lastSearch,userId:userId,startIndex:startIdx,endIndex:endIdx};
+    }
+    else {
+        tmp = {fullName:srch,userId:userId,startIndex:startIdx,endIndex:endIdx};
     }
 
     let contactList = "";
 
-    let tmp = {fullName:srch,userId:userId,startIndex:startIdx,endIndex:endIdx};
     let jsonPayload = JSON.stringify( tmp );
 
     let url = urlBase + '/SearchContacts.' + extension;
@@ -261,26 +255,26 @@ function searchContact(srch)
             if (this.readyState == 4 && this.status == 200) 
             {
                 let jsonObject = JSON.parse( xhr.responseText );
-                let table;
+                let table = document.getElementById("contactTable");
 
-                if(startIdx == 0) {
-                    document.getElementById("contactSearchResult").innerHTML = "";
+                if(table == null || srch == null) {
                     table = document.createElement('table');
                     table.style.backgroundColor = "#000000";
                     table.id = "contactTable";
+                    document.getElementById("contactSearchResult").innerHTML = "";
                 }
-                else {
-                    table = document.getElementById("contactSearchResult").firstChild;
-                }
+
+                let iterations = jsonObject.results[0].length;
 
                 if(jsonObject.results[0].length == endIdx - startIdx) {
                     loadMore = true;
+                    iterations -= 1;
                 }
                 else {
                     loadMore = false;
                 }
 
-                for( let i=0; i<jsonObject.results[0].length; i++ )
+                for( let i=0; i<iterations; i++ )
                 {
                     var tr = document.createElement('tr');
                     tr.id = jsonObject["results"][0][i]["id"];
@@ -301,10 +295,14 @@ function searchContact(srch)
                     emailDiv.style.overflow = "auto";
                     phoneNumDiv.style.overflow = "auto";
 
-		    emailDiv.style.display = "inline-block";
+		            emailDiv.style.verticalAlign = "top";
+		            emailDiv.style.display = "inline-block";
                     emailDiv.style.minWidth = "80%";
+                    emailDiv.style.maxWidth = "100%";
+                    phoneNumDiv.style.verticalAlign = "top";
                     phoneNumDiv.style.display = "inline-block";
                     phoneNumDiv.style.minWidth = "80%";
+                    phoneNumDiv.style.maxWidth = "100%";
 
                     email.oninput = function(){validateEmail(this)};
                     phoneNum.oninput = function(){validatePhone(this)};
@@ -348,6 +346,9 @@ function searchContact(srch)
 
                 lazyLoad();
             }
+            else if(this.status != 200) {
+                document.getElementById("contactSearchResult").innerHTML = "Error: Could not load contacts";
+            }
         };
         xhr.send(jsonPayload);
     }
@@ -356,7 +357,6 @@ function searchContact(srch)
         document.getElementById("contactSearchResult").innerHTML = err.message;
     }
 }
-
 
 function newRow() {
     let table = document.getElementById("contactTable");
@@ -394,7 +394,7 @@ function newRow() {
             let newText = document.createTextNode("");
 
             newDiv.style.overflow = "auto";
-	    newDiv.contentEditable = true;
+	        newDiv.contentEditable = true;
 
             newCell.appendChild(newDiv);
             newDiv.appendChild(newText);
@@ -402,13 +402,17 @@ function newRow() {
 
             if(i == 2) {
                 newCell.oninput = function(){validateEmail(this)};
-		newDiv.style.display = "inline-block";
+                newDiv.style.verticalAlign = "top";
+		        newDiv.style.display = "inline-block";
                 newDiv.style.minWidth = "80%";
+                newDiv.style.maxWidth = "100%";
             }
             if(i == 3) {
                 newCell.oninput = function(){validatePhone(this)};
-		newDiv.style.display = "inline-block";
+                newDiv.style.verticalAlign = "top";
+		        newDiv.style.display = "inline-block";
                 newDiv.style.minWidth = "80%";
+                newDiv.style.maxWidth = "100%";
             }
         }
     }
@@ -419,8 +423,22 @@ function addContact(newRow) {
     let lastName = newRow.children[1].innerText;
     let email = newRow.children[2].innerText;
     let phone = newRow.children[3].innerText;
+
+    if(firstName == "" && lastName == "" && email == "" && phone == "") {
+        displayError("Error: Valid contact must have one non-empty value");
+        return;
+    }
     
-    if(newRow.children[2].children.length > 1 || newRow.children[3].children.length > 1) {
+    if(newRow.children[2].children.length > 1 && newRow.children[3].children.length > 1) {
+        displayError("Error: Email is invalid and Phone Number must be 10 digits (###-###-####)");
+        return;
+    }
+    else if(newRow.children[2].children.length > 1) {
+        displayError("Error: Email is invalid");
+        return;
+    }
+    else if(newRow.children[3].children.length > 1){
+        displayError("Error: Phone Number must be 10 digits (###-###-####)");
         return;
     }
 
@@ -457,12 +475,20 @@ function addContact(newRow) {
                 edit.style = "width: 14%; height: 14%"
                 edit.onclick = function(){editRow(newRow)};
                 newRow.children[4].appendChild(edit);
+
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+            else if(this.status != 200) {
+                displayError("Error: Could not add contact");
             }
         }
     }
     catch(err)
     {
-        console.log("Error: Could not add contact");
+        displayError("Error: Could not add contact");
     }
 }
 
@@ -490,6 +516,10 @@ function editRow(currRow) {
 }
 
 function deleteContact(currRow) {
+    if (!confirm("Are you sure you want to delete this contact?")) {
+        return; 
+    }
+    
     let contactID = currRow.id;
 
     let tmp = { id: contactID };
@@ -505,12 +535,19 @@ function deleteContact(currRow) {
         xhr.send(jsonPayload);
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                currRow.remove();  
+                currRow.remove(); 
+                
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+            else if(this.status != 200) {
+                displayError("Error: Could not delete contact");
             }
         };
-        
     } catch (err) {
-        console.log("Error: Could not delete contact", err);
+        displayError("Error: Could not delete contact");
     }
 }
 
@@ -521,9 +558,23 @@ function updateContact(curRow)
     let email = curRow.children[2].innerText;
     let phone = curRow.children[3].innerText;
     let contactID = curRow.id;
-    
-    if(curRow.children[2].children.length > 1 || curRow.children[3].children.length > 1) {
+
+    if(firstName == "" && lastName == "" && email == "" && phone == "") {
+        displayError("Error: Valid contact must have one non-empty value");
         return;
+    }
+    
+    if(curRow.children[2].children.length > 1 && curRow.children[3].children.length > 1) {
+        displayError("Error: Email is invalid and Phone Number must be 10 digits (###-###-####)");
+	return;
+    }
+    else if(curRow.children[2].children.length > 1) {
+        displayError("Error: Email is invalid");
+	return;
+    }
+    else if(curRow.children[3].children.length > 1){
+        displayError("Error: Phone Number must be 10 digits (###-###-####)");
+	return;
     }
 
     let tmp = {firstName:firstName,lastName:lastName,contactID:contactID,phoneNumber:phone,email:email};
@@ -556,29 +607,39 @@ function updateContact(curRow)
                 edit.style = "width: 14%; height: 14%"
                 edit.onclick = function(){editRow(curRow)};
                 curRow.children[4].appendChild(edit);
+
+                let errorMsg = document.getElementById("errorMsg");
+                if(errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+            else if(this.status != 200) {
+                displayError("Error: Could not update contact");
             }
         }
     }
     catch(err)
     {
-        console.log("Error: Could not add contact");
+        displayError("Error: Could not update contact");
     }
 }
 
 function validateEmail(email) {
-    const regex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$/;
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if(!regex.test(email.children[email.children.length - 1].textContent)) {
         if(email.children.length == 1) {
             const errorIcon = document.createElement("img");
             errorIcon.src = "images/error.png";
             errorIcon.style = "width: 10%; height: 10%; padding-right: 10px;";
 
+            email.firstChild.style.maxWidth = "80%";
             email.insertBefore(errorIcon, email.firstChild);
         }
     }
     else {
         if(email.children.length > 1) {
             email.removeChild(email.firstChild);
+            email.firstChild.style.maxWidth = "100%";
         }
     }
 }
@@ -591,12 +652,14 @@ function validatePhone(phone) {
             errorIcon.src = "images/error.png";
             errorIcon.style = "width: 10%; height: 10%; padding-right: 10px";
 
+            phone.firstChild.style.maxWidth = "80%";
             phone.insertBefore(errorIcon, phone.firstChild);
         }
     }
     else {
         if(phone.children.length > 1) {
             phone.removeChild(phone.firstChild);
+            phone.firstChild.style.maxWidth = "100%";
         }
     }
 }
@@ -610,3 +673,24 @@ function lazyLoad() {
         }
     }
 }
+
+function displayError(msg) {
+    let errorDisplay = document.getElementById("errorDisplay");
+    
+    let errorDiv = document.createElement("div");
+    const errorMsg = document.createTextNode(" " + msg);
+
+    const errorIcon = document.createElement("img");
+    errorIcon.src = "images/error.png";
+    errorIcon.style = "width: 1%; height: 1%";
+
+    errorDiv.appendChild(errorIcon);
+    errorDiv.appendChild(errorMsg);
+
+    errorDisplay.innerHTML = "";
+    errorDisplay.appendChild(errorDiv);
+}
+
+
+
+
