@@ -30,15 +30,20 @@
         $stmt->execute();
         $result = $stmt->get_result();
 
-        
+        if ($result->num_rows > 0) {
+            returnWithError("User already exists", 200);
+        } else {
             // create user
-        $stmt = $conn->prepare("INSERT INTO Users (Login, Password) Values (?, ?)");
-    	$stmt->bind_param("ss", $username, $password);
+            $stmt = $conn->prepare("INSERT INTO Users (Login, Password) Values (?, ?)");
+            $stmt->bind_param("ss", $username, $password);
 
-        $stmt->execute();
-        $id = $stmt->insert_id;
-        returnWithInfo($id);
-        
+            if ($stmt->execute()) {
+                $id = $stmt->insert_id;
+                returnWithInfo($id);
+            } else {
+                returnWithError("Could not make an account right now", 500);
+            }
+        }
 
 		$stmt->close();
 		$conn->close();
@@ -64,5 +69,3 @@
 		sendResultInfoAsJson($retValue);
 	}
 ?>
-?>
-
