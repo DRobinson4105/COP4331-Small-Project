@@ -13,15 +13,8 @@
 	$email = $inData["email"];
 	$fullName = $firstName.' '.$lastName;
     
-    if($id < 1){
-        returnWithError("Contact ID not valid", 400);
-    }
-    else{
 
-        if($firstName == "" && $lastName == ""){
-            returnWithError("First name andd last name cannot be empty", 400);
-            return;
-        }
+
 
         $conn = new mysqli("localhost", "User", "COP4331OMg", "COP4331");
         
@@ -31,16 +24,14 @@
             //add more update parameters for email & phone
             $stmt = $conn->prepare("UPDATE Contacts SET FullName=?, FirstName=?, LastName=?, Phone=?, Email=? WHERE id = ?");
             $stmt->bind_param("ssssss", $fullName, $firstName, $lastName, $phoneNum, $email, $id);
-            if ($stmt->execute()) {
-                returnWithInfo();
-            } else {
-                returnWithError("Could not create a contact right now.", 500);
-            }
+            $stmt->execute();
+            returnWithInfo();
+
             
             $stmt->close();
             $conn->close();
         }
-    }
+    
 
 	function getRequestInfo() {
 		return json_decode(file_get_contents('php://input'), true);
