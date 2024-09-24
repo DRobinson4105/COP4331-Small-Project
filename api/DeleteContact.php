@@ -7,10 +7,7 @@
 	}
 
 	$id = $inData["id"];
-    if($id < 1){
-        returnWithError("ID is not valid", 400);
-    }
-    else{
+
 
         $conn = new mysqli("localhost", "User", "COP4331OMg", "COP4331");
 
@@ -20,16 +17,11 @@
             $stmt = $conn->prepare("DELETE FROM Contacts WHERE ID =?");
             $stmt->bind_param("s", $id);
 
-            if ($stmt->execute()) {
-                returnWithInfo();
-            } else {
-                returnWithError("Unable to delete the provided contact. Ensure contant exists.", 500);
-            }
-            
+            $stmt->execute();
+            returnWithInfo();
             $stmt->close();
             $conn->close();
         }
-    }
 
 	function getRequestInfo() {
 		return json_decode(file_get_contents('php://input'), true);
