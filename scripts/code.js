@@ -13,7 +13,7 @@ function doLogin()
     
     let login = document.getElementById("login").value;
     let password = document.getElementById("password").value;
-    
+    // Makes sure that empty login doesnt work LOL
     if (login.trim() === "" || password.trim() === "") {
         const errorMessage = document.createElement("div");
 
@@ -30,7 +30,6 @@ function doLogin()
         document.getElementById("loginResult").appendChild(errorMessage);
         return; 
     }
-
 
     let tmp = {login:login,password:password};
     let jsonPayload = JSON.stringify( tmp );
