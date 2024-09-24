@@ -211,16 +211,19 @@ function doLogout()
 
 function searchContact(srch)
 {
+    let tmp;
     if(srch == null) {
-        srch = document.getElementById("searchText").value;
-        lastSearch = srch;
+        lastSearch = document.getElementById("searchText").value;
         startIdx = 0;
         endIdx = 11;
+        tmp = {fullName:lastSearch,userId:userId,startIndex:startIdx,endIndex:endIdx};
+    }
+    else {
+        tmp = {fullName:srch,userId:userId,startIndex:startIdx,endIndex:endIdx};
     }
 
     let contactList = "";
 
-    let tmp = {fullName:srch,userId:userId,startIndex:startIdx,endIndex:endIdx};
     let jsonPayload = JSON.stringify( tmp );
 
     let url = urlBase + '/SearchContacts.' + extension;
@@ -235,23 +238,26 @@ function searchContact(srch)
             if (this.readyState == 4 && this.status == 200) 
             {
                 let jsonObject = JSON.parse( xhr.responseText );
-                let table = document.getElementById("contactTable");;
+                let table = document.getElementById("contactTable");
 
-                if(table == null) {
-                    document.getElementById("contactSearchResult").innerHTML = "";
+                if(table == null || srch == null) {
                     table = document.createElement('table');
                     table.style.backgroundColor = "#000000";
                     table.id = "contactTable";
+                    document.getElementById("contactSearchResult").innerHTML = "";
                 }
+
+                let iterations = jsonObject.results[0].length;
 
                 if(jsonObject.results[0].length == endIdx - startIdx) {
                     loadMore = true;
+                    iterations -= 1;
                 }
                 else {
                     loadMore = false;
                 }
 
-                for( let i=0; i<jsonObject.results[0].length - 1; i++ )
+                for( let i=0; i<iterations; i++ )
                 {
                     var tr = document.createElement('tr');
                     tr.id = jsonObject["results"][0][i]["id"];
@@ -334,7 +340,6 @@ function searchContact(srch)
         document.getElementById("contactSearchResult").innerHTML = err.message;
     }
 }
-
 
 function newRow() {
     let table = document.getElementById("contactTable");
